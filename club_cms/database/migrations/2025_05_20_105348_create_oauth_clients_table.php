@@ -11,17 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('oauth_clients', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->nullableMorphs('owner');
-            $table->string('name');
-            $table->string('secret')->nullable();
-            $table->string('provider')->nullable();
-            $table->text('redirect_uris');
-            $table->text('grant_types');
-            $table->boolean('revoked');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('oauth_clients')) {
+            Schema::create('oauth_clients', function (Blueprint $table) {
+                $table->char('id', 36)->primary();
+                $table->string('owner_type')->nullable();
+                $table->unsignedBigInteger('owner_id')->nullable();
+                $table->string('name');
+                $table->string('secret')->nullable();
+                $table->string('provider')->nullable();
+                $table->text('redirect_uris');
+                $table->text('grant_types');
+                $table->boolean('revoked');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
