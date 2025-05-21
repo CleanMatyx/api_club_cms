@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CourtRequest;
 use App\Models\Court;
 use App\Models\Sport;
-use App\Http\Controllers\Resources\CourtResource;
+use App\Http\Resources\CourtResource;
 use Carbon\Carbon;
 
 class CourtController extends Controller
