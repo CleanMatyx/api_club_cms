@@ -46,4 +46,11 @@ class Member extends Model
     public function checkSameHourReservation(Carbon $date, $hour) {
         return $this->reservations()->whereDate('date', $date)->where('hour', $hour)->exists();
     }
+
+    /**
+     * Get the user associated with the member.
+     */
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

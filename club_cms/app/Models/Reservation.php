@@ -40,4 +40,12 @@ class Reservation extends Model
     public function court() {
         return $this->belongsTo(Court::class);
     }
+
+    /**
+     * Get the user associated with the reservation.
+     */
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+    
 }

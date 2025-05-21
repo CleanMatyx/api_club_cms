@@ -26,7 +26,8 @@ class CourtController extends Controller
                     'ok' => true,
                     'courts' => CourtResource::collection($courts),
                     'page' => $courts->currentPage(),
-                    'total' => $courts->total()
+                    'total_pages' => $courts->lastPage(),
+                    'total_courts' => $courts->total()
                 ], 200);
             } else {
                 return response()->json([
@@ -65,7 +66,7 @@ class CourtController extends Controller
                 return response()->json([
                     'ok' => true,
                     'message' => 'Pista creada correctamente',
-                    'court' => $court
+                    'court' => new CourtResource($court)
                 ], 201);
             } else {
                 return response()->json([
@@ -93,7 +94,7 @@ class CourtController extends Controller
             if ($court) {
                 return response()->json([
                     'ok' => true,
-                    'court' => $court
+                    'court' => new CourtResource($court)
                 ], 200);
             } else {
                 return response()->json([
@@ -132,7 +133,7 @@ class CourtController extends Controller
                 return response()->json([
                     'ok' => true,
                     'message' => 'Pista actualizada correctamente',
-                    'court' => $court
+                    'court' => new CourtResource($court)
                 ], 200);
             } else {
                 return response()->json([
