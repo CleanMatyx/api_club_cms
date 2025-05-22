@@ -1,0 +1,751 @@
+{
+	"info": {
+		"_postman_id": "be246d54-4cf0-4837-af77-a02008ff428b",
+		"name": "club_cms_api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39687459"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", response.token);",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"email\": \"admin@admin.com\", \"password\": \"admin\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/auth/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courts",
+			"item": [
+				{
+					"name": "Get courts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/courts",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get court by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/courts/20",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post court",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"sport_id\": 1, \n    \"name\": \"Pista de fútbol sala\", \n    \"location\": \"Casa de carlos\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/courts",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put court by Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"sport_id\": 1,\n        \"name\": \"Pista de Fútbol 03 modificado\",\n        \"location\": \"Club Deportivo Agujetas modificada\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/courts/15",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete court",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/courts/20",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sport_name\": \"Fútbol\",\n  \"date\": \"10/05/2025\",\n  \"member_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/courts/search",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"courts",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/members",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get member by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/members/35",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"members",
+								"35"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\" : \"6\",\n    \"membership_date\" : \"2020-06-17\",\n    \"status\" : \"active\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/members",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put member by Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\" : \"6\",\n    \"membership_date\" : \"2020-06-17\",\n    \"status\" : \"incative\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/members/36",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"members",
+								"36"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete member",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/members/36",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"members",
+								"36"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Get reservations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/reservations",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get reservation by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/reservations/2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"4\",\n    \"date\" : \"2025-05-21\",\n    \"hour\" : \"19:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/reservations",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put reservation by Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"5\",\n    \"date\" : \"2025-05-21\",\n    \"hour\" : \"20:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/reservations/281",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"281"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete reservation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/reservations/281",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"281"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sports",
+			"item": [
+				{
+					"name": "Get sports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/sports",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"sports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get sports by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/sports/10",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"sports",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post sport",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jugar a la Xbox\",\n    \"description\" : \"Jugar a tus juegos favoritos\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/sports/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"sports",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put sport by Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jugar a la Xbox\",\n    \"description\" : \"Jugar a Halo un ratito (12 horas)\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/sports/10",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"sports",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete sport",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/sports/10",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"sports",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/users/2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"miclave123\",\n  \"password_confirmation\": \"miclave123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Juan Pérez Modificadp\",\n    \"email\": \"juan@example.com\",\n    \"password\": \"clave345\",\n    \"password_confirmation\": \"clave345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/4",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/users/3",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://swagger.local/api/users",
+					"protocol": "http",
+					"host": [
+						"swagger",
+						"local"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

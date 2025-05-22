@@ -62,10 +62,14 @@ class AuthController extends Controller
             ], 401);
         
         } catch (Exception $e) {
+            $errorMsg = $e->getMessage();
+            if (strpos($errorMsg, "Personal access client not found") !== false) {
+                $errorMsg .= " Ejecuta: php artisan passport:client --personal";
+            }
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al iniciar sesión por error inesperado',
-                'error' => $e->getMessage()
+                'error' => $errorMsg
             ], 500);
         }
     }
