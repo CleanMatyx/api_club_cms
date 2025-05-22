@@ -198,4 +198,29 @@ class Schema
      */
     private $errorResponse;
 
+    /**
+     * @OA\Schema(
+     *   schema="ValidationErrorResponse",
+     *   type="object",
+     *   description="Respuesta cuando falla la validación de los datos de la petición",
+     *   @OA\Property(
+     *     property="message",
+     *     type="string",
+     *     example="Error de validación",
+     *     description="Mensaje de error general"
+     *   ),
+     *   @OA\Property(
+     *     property="errors",
+     *     type="object",
+     *     description="Listado de errores de validación por campo",
+     *     additionalProperties=@OA\Property(
+     *       type="array",
+     *       @OA\Items(type="string"),
+     *       example={"The selected sport id is invalid."}
+     *     )
+     *   )
+     * )
+     */
+    private $validationErrorResponse;
+
 }

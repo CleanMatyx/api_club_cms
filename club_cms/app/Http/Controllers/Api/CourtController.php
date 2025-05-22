@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CourtRequest;
 use App\Models\Court;
 use App\Models\Sport;
 use App\Http\Resources\CourtResource;
+use App\Http\Requests\SearchRequest;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 /**
  * @OA\Tag(
@@ -55,9 +58,8 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $courts = Court::paginate(15);
-
         try {
+            $courts = Court::paginate(15);
             if (!$courts->isEmpty()) {
                 return response()->json([
                     'ok' => true,
@@ -110,6 +112,16 @@ class CourtController extends Controller
      *   )
      *  ),
      *  @OA\Response(
+     *   response=404,
+     *   description="Pista no encontrada",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=422,
+     *    description="Error de validación",
+     *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *  ),
+     *  @OA\Response(
      *   response=500,
      *   description="Error al crear la pista",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -118,27 +130,32 @@ class CourtController extends Controller
      */
     public function store(CourtRequest $request)
     {
-        $request->validated();
-
-        $court = Court::create($request->all());
-
         try {
+            $request->validated();
+            $court = Court::create($request->all());
+
             if ($court) {
                 return response()->json([
                     'ok' => true,
                     'message' => 'Pista creada correctamente',
                     'court' => new CourtResource($court)
                 ], 201);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al crear la pista'
-                ], 500);
             }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Recurso relacionado no encontrado'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la pista por error insesperado',
+                'message' => 'Error al crear la pista por error inesperado',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -231,15 +248,20 @@ class CourtController extends Controller
      *   description="Pista actualizada correctamente",
      *   @OA\JsonContent(
      *    type="object",
-     *    @OA\Property(property="ok",      type="boolean", example=true),
+     *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="message", type="string",  example="Pista actualizada correctamente"),
-     *    @OA\Property(property="court",   ref="#/components/schemas/CourtResource")
+     *    @OA\Property(property="court", ref="#/components/schemas/CourtResource")
      *   )
      *  ),
      *  @OA\Response(
      *   response=404,
      *   description="Pista no encontrada",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=422,
+     *    description="Error de validación",
+     *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=500,
@@ -250,23 +272,27 @@ class CourtController extends Controller
      */
     public function update(CourtRequest $request, string $id)
     {
-        $request->validated();
-        $court = Court::findOrFail($id);
-        $court->update($request->all());
-
         try {
-            if ($court) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Pista actualizada correctamente',
-                    'court' => new CourtResource($court)
-                ], 200);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al actualizar la pista'
-                ], 500);
-            }
+            $request->validated();
+            $court = Court::findOrFail($id);
+            $court->update($request->all());
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Pista actualizada correctamente',
+                'court' => new CourtResource($court)
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Pista no encontrada'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -294,14 +320,9 @@ class CourtController extends Controller
      *   description="Pista eliminada correctamente",
      *   @OA\JsonContent(
      *    type="object",
-     *    @OA\Property(property="ok",      type="boolean", example=true),
+     *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="message", type="string",  example="Pista eliminada correctamente")
      *   )
-     *  ),
-     *  @OA\Response(
-     *   response=404,
-     *   description="Pista no encontrada",
-     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=500,
@@ -312,10 +333,9 @@ class CourtController extends Controller
      */
     public function destroy(string $id)
     {
-        $court = Court::findOrFail($id);
-        $court->delete();
-
         try {
+            $court = Court::findOrFail($id);
+            $court->delete();
             if ($court) {
                 return response()->json([
                     'ok' => true,
@@ -337,8 +357,8 @@ class CourtController extends Controller
     }
 
     /**
-     * @OA\Get(
-     *  path="/search",
+     * @OA\Post(
+     *  path="/courts/search",
      *  summary="Buscar disponibilidad de pistas y horas para un deporte, un socio y una fecha",
      *  tags={"Search Courts"},
      *  security={{"bearerAuth":{}}},
@@ -413,6 +433,11 @@ class CourtController extends Controller
      *    )
      *   )
      *  ),
+     *   @OA\Response(
+     *    response=422,
+     *    description="Error de validación",
+     *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *  ),
      *  @OA\Response(
      *   response=500,
      *   description="Error inesperado",
@@ -424,78 +449,69 @@ class CourtController extends Controller
      *  )
      * )
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
-                'sport_name' => 'required|string',
-                'date' => 'required|string',
-                'member_id' => 'required|integer'
-            ]);
+            $data = $request->validated();
 
             try {
-                $validated['date'] = Carbon::createFromFormat('d/m/Y', $validated['date'])->format('Y-m-d');
+                $data['date'] = Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d');
             } catch (\Exception $e) {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'El formato de la fecha es inválido. Use el formato d/m/Y.'
-                ], 400);
+                throw ValidationException::withMessages([
+                    'date' => ['El formato de la fecha es inválido. Use el formato d/m/Y.']
+                ]);
             }
 
-            $sportExists = Sport::where('name', $validated['sport_name'])->exists();
-
-            if (!$sportExists) {
-                $availableSports = Sport::pluck('name');
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'El deporte consultado no está disponible.',
-                    'available_sports' => $availableSports
-                ], 404);
+            $sport = Sport::where('name', $data['sport_name'])->first();
+            if (!$sport) {
+                throw new ModelNotFoundException("El deporte consultado no está disponible.");
             }
 
-            $availableCourts = Court::whereHas('sport', fn($query) => $query->where('name', $validated['sport_name']))->get();
-
-            if ($availableCourts->isEmpty()) {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'No hay pistas disponibles para el deporte especificado.'
-                ], 404);
+            $courts = Court::where('sport_id', $sport->id)->get();
+            if ($courts->isEmpty()) {
+                throw new ModelNotFoundException("No hay pistas disponibles para el deporte especificado.");
             }
 
-            $availableHours = [];
-            foreach ($availableCourts as $court) {
-                $reservedHours = $court->reservations()
-                    ->whereDate('date', $validated['date'])
-                    ->pluck('hour')->map(function($h) { return (int) $h; });
+            $available_hours = [];
+            foreach ($courts as $court) {
+                $reserved = $court->reservations()->whereDate('date', $data['date'])->pluck('hour')->map(fn($h) => (int) $h);
+                $allHours  = collect(range(8, 21));
+                $freeHours = $allHours->diff($reserved)->values();
 
-                $allHours = collect(range(8, 21));
-                $freeHours = $allHours->diff($reservedHours)->values();
-
-                $availableHours[] = [
+                $available_hours[] = [
                     'id' => $court->id,
                     'name' => $court->name,
                     'hours_free' => $freeHours,
-                    'hours_reserved' => $reservedHours->values()
+                    'hours_reserved' => $reserved->values(),
                 ];
             }
 
-            if (empty($availableHours)) {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'No hay horas disponibles para el deporte especificado.'
-                ], 404);
-            } else {
-                return response()->json([
-                    'ok' => true,
-                    'available_hours' => $availableHours
-                ], 200);
+            if (empty($available_hours)) {
+                throw new ModelNotFoundException("No hay horas disponibles para el deporte especificado.");
             }
+
+            return response()->json([
+                'ok' => true,
+                'available_hours' => $available_hours,
+            ], 200);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors(),
+            ], 422);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => $e->getMessage(),
+            ], 404);
 
         } catch (\Exception $e) {
             return response()->json([
-                'ok' => false,
+                'ok'=> false,
                 'message' => 'Ocurrió un error inesperado.',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

@@ -211,6 +211,26 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Pista no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al crear la pista",
                         "content": {
@@ -357,6 +377,16 @@
                             }
                         }
                     },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al actualizar la pista",
                         "content": {
@@ -413,16 +443,6 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Pista no encontrada",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
                     "500": {
                         "description": "Error al eliminar la pista",
                         "content": {
@@ -441,13 +461,13 @@
                 ]
             }
         },
-        "/search": {
-            "get": {
+        "/courts/search": {
+            "post": {
                 "tags": [
                     "Search Courts"
                 ],
                 "summary": "Buscar disponibilidad de pistas y horas para un deporte, un socio y una fecha",
-                "operationId": "e164153200c9ee00bd30f69bfad8703f",
+                "operationId": "8036aa4d88fd8b670b5755ee85366355",
                 "parameters": [
                     {
                         "name": "sport_name",
@@ -583,6 +603,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -724,6 +754,26 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Miembro no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -870,6 +920,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -1063,6 +1123,26 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Reserva no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al crear la reserva",
                         "content": {
@@ -1152,7 +1232,7 @@
                     "Reservations"
                 ],
                 "summary": "Actualizar una reserva existente",
-                "operationId": "4da175fde81fefc3142e9244a5a49172",
+                "operationId": "4a219e5cfd9760d12da084929201d042",
                 "parameters": [
                     {
                         "name": "id",
@@ -1205,6 +1285,16 @@
                             }
                         }
                     },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al actualizar la reserva",
                         "content": {
@@ -1227,7 +1317,7 @@
                     "Reservations"
                 ],
                 "summary": "Eliminar una reserva",
-                "operationId": "49985fab71e21f515e69a962884d2910",
+                "operationId": "b97e0df7036fa97413d6b819cf61a11e",
                 "parameters": [
                     {
                         "name": "id",
@@ -1257,16 +1347,6 @@
                                         }
                                     },
                                     "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Reserva no encontrada",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1390,6 +1470,26 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Deporte no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -1536,6 +1636,16 @@
                             }
                         }
                     },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al actualizar el deporte",
                         "content": {
@@ -1588,16 +1698,6 @@
                                         }
                                     },
                                     "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Deporte no encontrado",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1725,6 +1825,26 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -1871,6 +1991,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -2260,6 +2390,31 @@
                     "error": {
                         "type": "string",
                         "example": "Mensaje de error detallado"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "description": "Respuesta cuando falla la validación de los datos de la petición",
+                "properties": {
+                    "message": {
+                        "description": "Mensaje de error general",
+                        "type": "string",
+                        "example": "Error de validación"
+                    },
+                    "errors": {
+                        "description": "Listado de errores de validación por campo",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "The selected sport id is invalid."
+                            ],
+                            "property": "validationErrorResponse"
+                        }
                     }
                 },
                 "type": "object"

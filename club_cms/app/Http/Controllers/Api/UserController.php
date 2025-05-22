@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @OA\Tag(
@@ -28,15 +31,15 @@ class UserController extends Controller
      *     description="Listado de usuarios",
      *     @OA\JsonContent(
      *       type="object",
-     *       @OA\Property(property="ok",          type="boolean", example=true),
+     *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(
      *         property="users",
      *         type="array",
      *         @OA\Items(ref="#/components/schemas/UserResource")
      *       ),
-     *       @OA\Property(property="page",         type="integer", example=1),
-     *       @OA\Property(property="total_pages",  type="integer", example=5),
-     *       @OA\Property(property="total_users",  type="integer", example=50)
+     *       @OA\Property(property="page", type="integer", example=1),
+     *       @OA\Property(property="total_pages", type="integer", example=5),
+     *       @OA\Property(property="total_users", type="integer", example=50)
      *     )
      *   ),
      *   @OA\Response(
@@ -53,9 +56,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(15);
-
         try {
+            $users = User::paginate(15);
             if(!$users->isEmpty()) {
                 return response()->json([
                     'ok' => true,
@@ -89,51 +91,66 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *   path="/users",
-     *   summary="Crear un nuevo usuario",
-     *   tags={"Users"},
-     *   security={{"bearerAuth":{}}},
-     *   @OA\RequestBody(
-     *     required=true,
-     *     @OA\JsonContent(ref="#/components/schemas/UserRequest")
-     *   ),
-     *   @OA\Response(
-     *     response=201,
-     *     description="Usuario creado correctamente",
-     *     @OA\JsonContent(
-     *       type="object",
-     *       @OA\Property(property="ok",   type="boolean", example=true),
-     *       @OA\Property(property="message", type="string", example="Usuario creado correctamente"),
-     *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
-     *     )
-     *   ),
-     *   @OA\Response(
-     *     response=500,
-     *     description="Error al crear el usuario",
-     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  path="/users",
+     *  summary="Crear un nuevo usuario",
+     *  tags={"Users"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\RequestBody(
+     *   required=true,
+     *   @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *  ),
+     *  @OA\Response(
+     *   response=201,
+     *   description="Usuario creado correctamente",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(property="message", type="string", example="Usuario creado correctamente"),
+     *    @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="Usuario no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=422,
+     *    description="Error de validación",
+     *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al crear el usuario",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
      * )
      */
     public function store(UserRequest $request)
     {
-        $request->validated();
-        $data = $request->all();
-        $data['password'] = Hash::make($data['password']);
-        $user = User::create($data);
-
         try {
-            if($user) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Usuario creado correctamente',
-                    'user' => new UserResource($user)
-                ], 201);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al crear el usuario'
-                ], 500);
-            }
+            $request->validated();
+            $data = $request->all();
+            $data['password'] = Hash::make($data['password']);
+            $user = User::create($data);
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Usuario creado correctamente',
+                'user' => new UserResource($user)
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al crear el usuario',
+                'error' => $e->getMessage()
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -161,7 +178,7 @@ class UserController extends Controller
      *     description="Detalle del usuario",
      *     @OA\JsonContent(
      *       type="object",
-     *       @OA\Property(property="ok",   type="boolean", example=true),
+     *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *     )
      *   ),
@@ -210,41 +227,46 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *   path="/users/{id}",
-     *   summary="Actualizar un usuario existente",
-     *   tags={"Users"},
-     *   security={{"bearerAuth":{}}},
-     *   @OA\Parameter(
-     *     name="id",
-     *     in="path",
-     *     description="ID del usuario a actualizar",
-     *     required=true,
-     *     @OA\Schema(type="integer", example=1)
-     *   ),
-     *   @OA\RequestBody(
-     *     required=true,
-     *     @OA\JsonContent(ref="#/components/schemas/UserRequest")
-     *   ),
-     *   @OA\Response(
-     *     response=200,
-     *     description="Usuario actualizado correctamente",
-     *     @OA\JsonContent(
-     *       type="object",
-     *       @OA\Property(property="ok",   type="boolean", example=true),
-     *       @OA\Property(property="message", type="string", example="Usuario actualizado correctamente"),
-     *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
-     *     )
-     *   ),
-     *   @OA\Response(
-     *     response=404,
-     *     description="Usuario no encontrado",
-     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *   ),
-     *   @OA\Response(
-     *     response=500,
-     *     description="Error al actualizar el usuario",
-     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  path="/users/{id}",
+     *  summary="Actualizar un usuario existente",
+     *  tags={"Users"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Parameter(
+     *   name="id",
+     *   in="path",
+     *   description="ID del usuario a actualizar",
+     *   required=true,
+     *   @OA\Schema(type="integer", example=1)
+     *  ),
+     *  @OA\RequestBody(
+     *   required=true,
+     *   @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *  ),
+     *  @OA\Response(
+     *   response=200,
+     *   description="Usuario actualizado correctamente",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(property="message", type="string", example="Usuario actualizado correctamente"),
+     *    @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="Usuario no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=422,
+     *    description="Error de validación",
+     *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al actualizar el usuario",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
      * )
      */
     public function update(UserRequest $request, string $id)
@@ -253,10 +275,11 @@ class UserController extends Controller
             $request->validated();
             $user = User::findOrFail($id);
             $data = $request->all();
+
             if (isset($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
             } else {
-                unset($data['password']); // No actualizar si no viene
+                unset($data['password']);
             }
             $user->update($data);
 
@@ -265,12 +288,18 @@ class UserController extends Controller
                 'message' => 'Usuario actualizado correctamente',
                 'user' => new UserResource($user)
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ValidationException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Usuario no encontrado'
             ], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al actualizar el usuario debido a un error inesperado',
@@ -315,10 +344,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
         try {
+            $user = User::findOrFail($id);
+            $user->delete();
             if ($user) {
                 return response()->json([
                     'ok' => true,
