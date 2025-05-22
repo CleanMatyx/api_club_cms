@@ -131,6 +131,10 @@ docker-compose exec club_cms_php npm run build</code></pre>
       <strong>Crea y rellena la base de datos de demo:</strong>
       <pre><code>docker-compose exec club_cms_php php artisan migrate:fresh --seed</code></pre>
     </li>
+    <li>
+      <strong>Ejecuta en terminal para obtener el Personal accsess client</strong>
+      <pre><code>php artisan passport:client --personal</code></pre>
+    </li>
   </ol>
 
   <h2>Uso diario</h2>
