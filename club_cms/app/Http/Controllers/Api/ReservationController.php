@@ -8,10 +8,47 @@ use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\Http\Requests\ReservationRequest;
 
+/**
+ * @OA\Tag(
+ *   name="Reservations",
+ *   description="Operaciones sobre reservas"
+ * )
+ */
 class ReservationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *   path="/reservations",
+     *   summary="Listar reservas",
+     *   tags={"Reservations"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Listado de reservas",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",                type="boolean", example=true),
+     *       @OA\Property(
+     *         property="reservations",
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/ReservationResource")
+     *       ),
+     *       @OA\Property(property="page",              type="integer", example=1),
+     *       @OA\Property(property="total_pages",       type="integer", example=5),
+     *       @OA\Property(property="total_reservations", type="integer", example=50)
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="No hay reservas disponibles",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener las reservas",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function index()
     {
@@ -50,7 +87,30 @@ class ReservationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *   path="/reservations",
+     *   summary="Crear una nueva reserva",
+     *   tags={"Reservations"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/ReservationRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=201,
+     *     description="Reserva creada correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",          type="boolean", example=true),
+     *       @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al crear la reserva",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function store(ReservationRequest $request)
     {
@@ -80,7 +140,38 @@ class ReservationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *   path="/reservations/{id}",
+     *   summary="Mostrar detalles de una reserva",
+     *   tags={"Reservations"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID de la reserva",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Detalle de la reserva",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",         type="boolean", example=true),
+     *       @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Reserva no encontrada",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener la reserva",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function show(string $id)
     {
@@ -106,7 +197,42 @@ class ReservationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @OA\Put(
+     *   path="/reservations/{id}",
+     *   summary="Actualizar una reserva existente",
+     *   tags={"Reservations"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID de la reserva a actualizar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/ReservationRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Reserva actualizada correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",         type="boolean", example=true),
+     *       @OA\Property(property="reservation",ref="#/components/schemas/ReservationResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Reserva no encontrada",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al actualizar la reserva",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function edit(string $id)
     {
@@ -114,7 +240,38 @@ class ReservationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Delete(
+     *   path="/reservations/{id}",
+     *   summary="Eliminar una reserva",
+     *   tags={"Reservations"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID de la reserva a eliminar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Reserva eliminada correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",      type="boolean", example=true),
+     *       @OA\Property(property="message", type="string",  example="Reserva eliminada correctamente")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Reserva no encontrada",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al eliminar la reserva",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function update(ReservationRequest $request, string $id)
     {

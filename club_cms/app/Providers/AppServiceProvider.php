@@ -20,8 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Passport::tokensExpireIn(now()->addHours(1));
-        Passport::refreshTokensExpireIn(now()->addDays(1));
-        Passport::personalAccessTokensExpireIn(now()->addDays(10));
+        Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');
+        Passport::tokensExpireIn(now()->addMinutes(30));
+        Passport::refreshTokensExpireIn(now()->addDays(30));
+        Passport::personalAccessTokensExpireIn(now()->addDays(30));
+        Passport::tokensCan([
+            'admin' => 'Admin access',
+            'user' => 'User access',
+        ]);
     }
 }

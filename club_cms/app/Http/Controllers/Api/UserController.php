@@ -9,10 +9,47 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @OA\Tag(
+ *   name="Users",
+ *   description="Operaciones sobre usuarios"
+ * )
+ */
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *   path="/users",
+     *   summary="Listar usuarios",
+     *   tags={"Users"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Listado de usuarios",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",          type="boolean", example=true),
+     *       @OA\Property(
+     *         property="users",
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/UserResource")
+     *       ),
+     *       @OA\Property(property="page",         type="integer", example=1),
+     *       @OA\Property(property="total_pages",  type="integer", example=5),
+     *       @OA\Property(property="total_users",  type="integer", example=50)
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="No hay usuarios disponibles",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener los usuarios",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function index()
     {
@@ -51,7 +88,31 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *   path="/users",
+     *   summary="Crear un nuevo usuario",
+     *   tags={"Users"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=201,
+     *     description="Usuario creado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",   type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Usuario creado correctamente"),
+     *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al crear el usuario",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function store(UserRequest $request)
     {
@@ -83,7 +144,38 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *   path="/users/{id}",
+     *   summary="Mostrar detalles de un usuario",
+     *   tags={"Users"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del usuario",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Detalle del usuario",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",   type="boolean", example=true),
+     *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Usuario no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener el usuario",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function show(string $id)
     {
@@ -117,7 +209,43 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *   path="/users/{id}",
+     *   summary="Actualizar un usuario existente",
+     *   tags={"Users"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del usuario a actualizar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Usuario actualizado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",   type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Usuario actualizado correctamente"),
+     *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Usuario no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al actualizar el usuario",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function update(UserRequest $request, string $id)
     {
@@ -152,7 +280,38 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *   path="/users/{id}",
+     *   summary="Eliminar un usuario",
+     *   tags={"Users"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del usuario a eliminar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Usuario eliminado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok", type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Usuario eliminado correctamente")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Usuario no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al eliminar el usuario",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function destroy(string $id)
     {

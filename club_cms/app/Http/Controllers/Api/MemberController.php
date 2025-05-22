@@ -8,10 +8,47 @@ use App\Models\Member;
 use App\Http\Resources\MemberResource;
 use App\Http\Requests\MemberRequest;
 
+/**
+ * @OA\Tag(
+ *  name="Members",
+ *  description="Operaciones sobre miembros"
+ * )
+ */
 class MemberController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *  path="/members",
+     *  summary="Listar miembros",
+     *  tags={"Members"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(
+     *   response=200,
+     *   description="Listado de miembros",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(
+     *     property="members",
+     *     type="array",
+     *     @OA\Items(ref="#/components/schemas/MemberResource")
+     *    ),
+     *    @OA\Property(property="page", type="integer", example=1),
+     *    @OA\Property(property="total_pages", type="integer", example=5),
+     *    @OA\Property(property="total_members", type="integer", example=50)
+     *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="No hay miembros disponibles",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al obtener los miembros",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function index()
     {
@@ -50,7 +87,31 @@ class MemberController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *  path="/members",
+     *  summary="Crear un nuevo miembro",
+     *  tags={"Members"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\RequestBody(
+     *   required=true,
+     *   @OA\JsonContent(ref="#/components/schemas/MemberRequest")
+     *  ),
+     *  @OA\Response(
+     *   response=201,
+     *   description="Miembro creado correctamente",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(property="message", type="string", example="Miembro creado correctamente"),
+     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
+     *   )
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al crear el miembro",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function store(MemberRequest $request)
     {
@@ -81,7 +142,38 @@ class MemberController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *  path="/members/{id}",
+     *  summary="Mostrar detalles de un miembro",
+     *  tags={"Members"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Parameter(
+     *   name="id",
+     *   in="path",
+     *   description="ID del miembro",
+     *   required=true,
+     *   @OA\Schema(type="integer", example=42)
+     *  ),
+     *  @OA\Response(
+     *   response=200,
+     *   description="Detalle del miembro",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
+     *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="Miembro no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al obtener el miembro",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function show(string $id)
     {
@@ -117,7 +209,43 @@ class MemberController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *  path="/members/{id}",
+     *  summary="Actualizar un miembro existente",
+     *  tags={"Members"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Parameter(
+     *   name="id",
+     *   in="path",
+     *   description="ID del miembro a actualizar",
+     *   required=true,
+     *   @OA\Schema(type="integer", example=42)
+     *  ),
+     *   @OA\RequestBody(
+     *    required=true,
+     *    @OA\JsonContent(ref="#/components/schemas/MemberRequest")
+     *  ),
+     *  @OA\Response(
+     *   response=200,
+     *   description="Miembro actualizado correctamente",
+     *   @OA\JsonContent(
+     *    type="object",
+     *    @OA\Property(property="ok", type="boolean", example=true),
+     *    @OA\Property(property="message", type="string", example="Miembro actualizado correctamente"),
+     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
+     *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="Miembro no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al actualizar el miembro",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function update(MemberRequest $request, string $id)
     {
@@ -148,7 +276,38 @@ class MemberController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *  path="/members/{id}",
+     *  summary="Eliminar un miembro",
+     *  tags={"Members"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Parameter(
+     *   name="id",
+     *   in="path",
+     *   description="ID del miembro a eliminar",
+     *   required=true,
+     *   @OA\Schema(type="integer", example=42)
+     *  ),
+     *  @OA\Response(
+     *   response=200,
+     *   description="Miembro eliminado correctamente",
+     *   @OA\JsonContent(
+     *     type="object",
+     *     @OA\Property(property="ok", type="boolean", example=true),
+     *     @OA\Property(property="message", type="string", example="Miembro eliminado correctamente")
+     *   )
+     *  ),
+     *  @OA\Response(
+     *   response=404,
+     *   description="Miembro no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *   response=500,
+     *   description="Error al eliminar el miembro",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function destroy(string $id)
     {

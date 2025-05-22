@@ -9,12 +9,47 @@ use App\Models\Sport;
 use App\Http\Resources\SportResource;
 use App\Http\Requests\SportRequest;
 
-
-
+/**
+ * @OA\Tag(
+ *   name="Sports",
+ *   description="Operaciones sobre deportes"
+ * )
+ */
 class SportController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *   path="/sports",
+     *   summary="Listar deportes",
+     *   tags={"Sports"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Response(
+     *     response=200,
+     *     description="Listado de deportes",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",            type="boolean", example=true),
+     *       @OA\Property(
+     *         property="sports",
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/SportResource")
+     *       ),
+     *       @OA\Property(property="page",          type="integer", example=1),
+     *       @OA\Property(property="total_pages",   type="integer", example=5),
+     *       @OA\Property(property="total_sports",  type="integer", example=50)
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="No hay deportes disponibles",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener los deportes",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function index()
     {
@@ -53,7 +88,30 @@ class SportController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *   path="/sports",
+     *   summary="Crear un nuevo deporte",
+     *   tags={"Sports"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/SportRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=201,
+     *     description="Deporte creado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",    type="boolean", example=true),
+     *       @OA\Property(property="sport", ref="#/components/schemas/SportResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al crear el deporte",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function store(SportRequest $request)
     {
@@ -83,7 +141,38 @@ class SportController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *   path="/sports/{id}",
+     *   summary="Mostrar detalles de un deporte",
+     *   tags={"Sports"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del deporte",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Detalle del deporte",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",    type="boolean", example=true),
+     *       @OA\Property(property="sport", ref="#/components/schemas/SportResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Deporte no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al obtener el deporte",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function show(string $id)
     {
@@ -117,7 +206,42 @@ class SportController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *   path="/sports/{id}",
+     *   summary="Actualizar un deporte existente",
+     *   tags={"Sports"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del deporte a actualizar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/SportRequest")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Deporte actualizado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",    type="boolean", example=true),
+     *       @OA\Property(property="sport", ref="#/components/schemas/SportResource")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Deporte no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al actualizar el deporte",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function update(SportRequest $request, string $id)
     {
@@ -147,7 +271,38 @@ class SportController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *   path="/sports/{id}",
+     *   summary="Eliminar un deporte",
+     *   tags={"Sports"},
+     *   security={{"bearerAuth":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="ID del deporte a eliminar",
+     *     required=true,
+     *     @OA\Schema(type="integer", example=1)
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Deporte eliminado correctamente",
+     *     @OA\JsonContent(
+     *       type="object",
+     *       @OA\Property(property="ok",      type="boolean", example=true),
+     *       @OA\Property(property="message", type="string",  example="Deporte eliminado correctamente")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=404,
+     *     description="Deporte no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
+     *     response=500,
+     *     description="Error al eliminar el deporte",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   )
+     * )
      */
     public function destroy(string $id)
     {

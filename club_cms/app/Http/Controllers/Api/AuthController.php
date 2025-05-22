@@ -1,22 +1,49 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @OA\Tag(
+ *   name="Auth",
+ *   description="Operaciones sobre autenticación"
+ * )
+ */
 class AuthController extends Controller
 {
     /**
-     * Function to login
+     * @OA\Post(
+     *  path="/auth/login",
+     *  summary="Iniciar sesión",
+     *  tags={"Auth"},
+     *  @OA\RequestBody(
+     *    required=true,
+     *    @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *  ),
+     *  @OA\Response(
+     *    response=200,
+     *    description="Login exitoso",
+     *    @OA\JsonContent(ref="#/components/schemas/LoginResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=401,
+     *    description="Credenciales incorrectas",
+     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=500,
+     *    description="Error inesperado",
+     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
-    public function login(Request $request) {
+    public function login(AuthRequest $request) {
         try {
-            $credentials = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required'
-            ]);
+            $credentials = $request->validated();
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
@@ -43,7 +70,22 @@ class AuthController extends Controller
     }
 
     /**
-     * Function to logout
+     * @OA\Post(
+     *  path="/auth/logout",
+     *  summary="Cerrar sesión",
+     *  tags={"Auth"},
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(
+     *    response=200,
+     *    description="Logout exitoso",
+     *    @OA\JsonContent(ref="#/components/schemas/LogoutResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=500,
+     *    description="Error inesperado",
+     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  )
+     * )
      */
     public function logout(Request $request) {
         try {
