@@ -4,8 +4,8 @@ services:
     container_name: club_cms_webserver
     restart: unless-stopped
     ports:
-    - "80:80"
-    - "443:443"
+    - "8085:80"
+    - "8443:443"
     volumes:
     - ./club_cms:/srv
     - caddy_data:/data
@@ -26,6 +26,7 @@ services:
       - 9000
     volumes:
       - ./club_cms:/srv
+      - vendor_data:/srv/vendor
     networks:
       - laravel_network
   database:
@@ -33,7 +34,7 @@ services:
     container_name: club_cms_database
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: club_cms_db
       MYSQL_ROOT_PASSWORD: dwes
@@ -47,6 +48,7 @@ volumes:
   caddy_data:
   caddy_config:
   db_data:
+  vendor_data:
   
 networks:
   laravel_network:

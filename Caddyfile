@@ -1,7 +1,17 @@
 :80 {
   	tls internal
 	root * /srv/public
-	php_fastcgi php:9000
-	file_server
 	encode gzip
+
+	handle_path /club/* {
+		root * /srv/public
+		rewrite * /{path}
+		php_fastcgi php:9000
+		file_server
+	}
+
+	handle {
+		php_fastcgi php:9000
+		file_server
+	}
 }

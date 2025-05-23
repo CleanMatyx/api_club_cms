@@ -43,8 +43,6 @@ RUN docker-php-ext-enable pdo_mysql
 # Install PHP Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install extension gettext
-
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
 
@@ -54,9 +52,25 @@ RUN usermod -u 1000 www-data
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /srv
 
-# Change current user to www
+# Copiar composer.json y composer.lock primero para aprovechar el cache de Docker
+COPY club_cms/composer.json club_cms/composer.lock /srv/
+
+# Copiar el resto de la aplicación
+COPY club_cms/ /srv/
+
+# Permisos para Laravel
+RUN chown -R www-data:www-data /srv/storage /srv/bootstrap/cache
+
+# Instalar dependencias de Laravel
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Copiar entrypoint personalizado
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 USER www-data
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
