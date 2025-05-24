@@ -22,6 +22,7 @@ class ReservationController extends Controller
      * @OA\Get(
      *   path="/reservations",
      *   summary="Listar reservas",
+     *   description="Obtiene una lista paginada de todas las reservas. Accesible para usuarios y administradores autenticados.",
      *   tags={"Reservations"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Response(
@@ -39,6 +40,11 @@ class ReservationController extends Controller
      *       @OA\Property(property="total_pages", type="integer", example=5),
      *       @OA\Property(property="total_reservations", type="integer", example=50)
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=404,
@@ -92,6 +98,7 @@ class ReservationController extends Controller
      * @OA\Post(
      *  path="/reservations",
      *  summary="Crear una nueva reserva",
+     *  description="Crea una nueva reserva en el sistema. Accesible para usuarios y administradores autenticados.",
      *  tags={"Reservations"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -106,6 +113,11 @@ class ReservationController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -162,6 +174,7 @@ class ReservationController extends Controller
      * @OA\Get(
      *  path="/reservations/{id}",
      *  summary="Mostrar detalles de una reserva",
+     *  description="Obtiene los detalles de una reserva específica. Accesible para usuarios y administradores autenticados.",
      *  tags={"Reservations"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -179,6 +192,11 @@ class ReservationController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -227,6 +245,7 @@ class ReservationController extends Controller
      * @OA\Put(
      *  path="/reservations/{id}",
      *  summary="Actualizar una reserva existente",
+     *  description="Actualiza los datos de una reserva existente. Accesible para usuarios y administradores autenticados.",
      *  tags={"Reservations"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -248,6 +267,11 @@ class ReservationController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="reservation",ref="#/components/schemas/ReservationResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *    response=404,
@@ -302,6 +326,7 @@ class ReservationController extends Controller
      * @OA\Delete(
      *   path="/reservations/{id}",
      *   summary="Eliminar una reserva",
+     *   description="Elimina una reserva del sistema. Accesible para usuarios y administradores autenticados.",
      *   tags={"Reservations"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Parameter(
@@ -319,6 +344,11 @@ class ReservationController extends Controller
      *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(property="message", type="string",  example="Reserva eliminada correctamente")
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=500,

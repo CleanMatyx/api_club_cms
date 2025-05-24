@@ -22,6 +22,7 @@ class MemberController extends Controller
      * @OA\Get(
      *  path="/members",
      *  summary="Listar miembros",
+     *  description="Obtiene una lista paginada de todos los miembros. Accesible para usuarios y administradores autenticados.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Response(
@@ -39,6 +40,11 @@ class MemberController extends Controller
      *    @OA\Property(property="total_pages", type="integer", example=5),
      *    @OA\Property(property="total_members", type="integer", example=50)
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -90,7 +96,8 @@ class MemberController extends Controller
     /**
      * @OA\Post(
      *  path="/members",
-     *  summary="Crear un nuevo miembro",
+     *  summary="Crear un nuevo miembro (Solo Admins)",
+     *  description="Crea un nuevo miembro en el sistema. Requiere rol de administrador.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -106,6 +113,11 @@ class MemberController extends Controller
      *    @OA\Property(property="message", type="string", example="Miembro creado correctamente"),
      *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -158,6 +170,7 @@ class MemberController extends Controller
      * @OA\Get(
      *  path="/members/{id}",
      *  summary="Mostrar detalles de un miembro",
+     *  description="Obtiene los detalles de un miembro específico. Accesible para usuarios y administradores autenticados.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -175,6 +188,11 @@ class MemberController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -221,7 +239,8 @@ class MemberController extends Controller
     /**
      * @OA\Put(
      *  path="/members/{id}",
-     *  summary="Actualizar un miembro existente",
+     *  summary="Actualizar un miembro existente (Solo Admins)",
+     *  description="Actualiza los datos de un miembro existente. Requiere rol de administrador.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -244,6 +263,11 @@ class MemberController extends Controller
      *    @OA\Property(property="message", type="string", example="Miembro actualizado correctamente"),
      *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -296,7 +320,8 @@ class MemberController extends Controller
     /**
      * @OA\Delete(
      *  path="/members/{id}",
-     *  summary="Eliminar un miembro",
+     *  summary="Eliminar un miembro (Solo Admins)",
+     *  description="Elimina un miembro del sistema. Requiere rol de administrador.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -314,6 +339,11 @@ class MemberController extends Controller
      *     @OA\Property(property="ok", type="boolean", example=true),
      *     @OA\Property(property="message", type="string", example="Miembro eliminado correctamente")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,

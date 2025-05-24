@@ -23,7 +23,8 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *   path="/users",
-     *   summary="Listar usuarios",
+     *   summary="Listar usuarios (Solo Admins)",
+     *   description="Obtiene una lista paginada de todos los usuarios. Requiere rol de administrador.",
      *   tags={"Users"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Response(
@@ -41,6 +42,11 @@ class UserController extends Controller
      *       @OA\Property(property="total_pages", type="integer", example=5),
      *       @OA\Property(property="total_users", type="integer", example=50)
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=404,
@@ -92,7 +98,8 @@ class UserController extends Controller
     /**
      * @OA\Post(
      *  path="/users",
-     *  summary="Crear un nuevo usuario",
+     *  summary="Crear un nuevo usuario (Solo Admins)",
+     *  description="Crea un nuevo usuario en el sistema. Requiere rol de administrador.",
      *  tags={"Users"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -108,6 +115,11 @@ class UserController extends Controller
      *    @OA\Property(property="message", type="string", example="Usuario creado correctamente"),
      *    @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -163,7 +175,8 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *   path="/users/{id}",
-     *   summary="Mostrar detalles de un usuario",
+     *   summary="Mostrar detalles de un usuario (Solo Admins)",
+     *   description="Obtiene los detalles de un usuario específico. Requiere rol de administrador.",
      *   tags={"Users"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Parameter(
@@ -181,6 +194,11 @@ class UserController extends Controller
      *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=404,
@@ -228,7 +246,8 @@ class UserController extends Controller
     /**
      * @OA\Put(
      *  path="/users/{id}",
-     *  summary="Actualizar un usuario existente",
+     *  summary="Actualizar un usuario existente (Solo Admins)",
+     *  description="Actualiza los datos de un usuario existente. Requiere rol de administrador.",
      *  tags={"Users"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -251,6 +270,11 @@ class UserController extends Controller
      *    @OA\Property(property="message", type="string", example="Usuario actualizado correctamente"),
      *    @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -311,7 +335,8 @@ class UserController extends Controller
     /**
      * @OA\Delete(
      *   path="/users/{id}",
-     *   summary="Eliminar un usuario",
+     *   summary="Eliminar un usuario (Solo Admins)",
+     *   description="Elimina un usuario del sistema. Requiere rol de administrador.",
      *   tags={"Users"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Parameter(
@@ -329,6 +354,11 @@ class UserController extends Controller
      *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(property="message", type="string", example="Usuario eliminado correctamente")
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=404,

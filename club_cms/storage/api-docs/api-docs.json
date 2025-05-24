@@ -21,6 +21,7 @@
                     "Auth"
                 ],
                 "summary": "Iniciar sesión",
+                "description": "Autentica un usuario en el sistema utilizando email y contraseña.",
                 "operationId": "99d66635c4992aeaa6aa44ff653d0563",
                 "requestBody": {
                     "required": true,
@@ -72,6 +73,7 @@
                     "Auth"
                 ],
                 "summary": "Cerrar sesión",
+                "description": "Cierra la sesión del usuario autenticado invalidando su token. Accesible para usuarios y administradores autenticados.",
                 "operationId": "6abf3b64a4bc7838d56346f05a5153af",
                 "responses": {
                     "200": {
@@ -80,6 +82,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/LogoutResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -107,7 +119,8 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Crear un nuevo usuario",
+                "summary": "Registrar un nuevo usuario",
+                "description": "Registra un nuevo usuario en el sistema y crea automáticamente su perfil de miembro.",
                 "operationId": "08136088c4862c313b35d6518bab8d3a",
                 "requestBody": {
                     "required": true,
@@ -163,12 +176,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/courts": {
@@ -177,6 +185,7 @@
                     "Courts"
                 ],
                 "summary": "Listar pistas",
+                "description": "Obtiene una lista paginada de todas las pistas. Accesible para usuarios y administradores autenticados.",
                 "operationId": "ad22a0ec751368d8d53832f3c2b95fec",
                 "responses": {
                     "200": {
@@ -213,6 +222,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No hay pistas disponibles",
                         "content": {
@@ -244,7 +263,8 @@
                 "tags": [
                     "Courts"
                 ],
-                "summary": "Crear una nueva pista",
+                "summary": "Crear una nueva pista (Solo Admins)",
+                "description": "Crea una nueva pista en el sistema. Requiere rol de administrador.",
                 "operationId": "e46ace1324601645d011660e140c8cd8",
                 "requestBody": {
                     "required": true,
@@ -276,6 +296,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -324,6 +354,7 @@
                     "Courts"
                 ],
                 "summary": "Mostrar detalles de una pista",
+                "description": "Obtiene los detalles de una pista específica. Accesible para usuarios y administradores autenticados.",
                 "operationId": "4c5ff29409abcb4a3093b93c08125600",
                 "parameters": [
                     {
@@ -353,6 +384,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -388,7 +429,8 @@
                 "tags": [
                     "Courts"
                 ],
-                "summary": "Actualizar una pista existente",
+                "summary": "Actualizar una pista existente (Solo Admins)",
+                "description": "Actualiza los datos de una pista existente. Requiere rol de administrador.",
                 "operationId": "2bf735bf6f7c1eb582654d1f9c0b9ea6",
                 "parameters": [
                     {
@@ -436,6 +478,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Pista no encontrada",
                         "content": {
@@ -477,7 +529,8 @@
                 "tags": [
                     "Courts"
                 ],
-                "summary": "Eliminar una pista",
+                "summary": "Eliminar una pista (Solo Admins)",
+                "description": "Elimina una pista del sistema. Requiere rol de administrador.",
                 "operationId": "be65d92a118597cab52d3f23304f8b8b",
                 "parameters": [
                     {
@@ -512,6 +565,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al eliminar la pista",
                         "content": {
@@ -536,6 +599,7 @@
                     "Search Courts"
                 ],
                 "summary": "Buscar disponibilidad de pistas y horas para un deporte, un socio y una fecha",
+                "description": "Busca la disponibilidad de pistas para un deporte específico en una fecha determinada. Accesible para usuarios y administradores autenticados.",
                 "operationId": "8036aa4d88fd8b670b5755ee85366355",
                 "parameters": [
                     {
@@ -621,6 +685,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -724,6 +798,7 @@
                     "Members"
                 ],
                 "summary": "Listar miembros",
+                "description": "Obtiene una lista paginada de todos los miembros. Accesible para usuarios y administradores autenticados.",
                 "operationId": "ffff12fc87590aad06f6e8282bd0831c",
                 "responses": {
                     "200": {
@@ -760,6 +835,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No hay miembros disponibles",
                         "content": {
@@ -791,7 +876,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Crear un nuevo miembro",
+                "summary": "Crear un nuevo miembro (Solo Admins)",
+                "description": "Crea un nuevo miembro en el sistema. Requiere rol de administrador.",
                 "operationId": "3ba7591543d7d445e19be1c7fef65e9a",
                 "requestBody": {
                     "required": true,
@@ -823,6 +909,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -871,6 +967,7 @@
                     "Members"
                 ],
                 "summary": "Mostrar detalles de un miembro",
+                "description": "Obtiene los detalles de un miembro específico. Accesible para usuarios y administradores autenticados.",
                 "operationId": "1ec8ec404243666a7250dfdbc904733c",
                 "parameters": [
                     {
@@ -900,6 +997,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -935,7 +1042,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Actualizar un miembro existente",
+                "summary": "Actualizar un miembro existente (Solo Admins)",
+                "description": "Actualiza los datos de un miembro existente. Requiere rol de administrador.",
                 "operationId": "b3343b4b4e177d072994080a4e19d263",
                 "parameters": [
                     {
@@ -983,6 +1091,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Miembro no encontrado",
                         "content": {
@@ -1024,7 +1142,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Eliminar un miembro",
+                "summary": "Eliminar un miembro (Solo Admins)",
+                "description": "Elimina un miembro del sistema. Requiere rol de administrador.",
                 "operationId": "60ccb06330d81e74342a654c4683369d",
                 "parameters": [
                     {
@@ -1055,6 +1174,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1093,6 +1222,7 @@
                     "Reservations"
                 ],
                 "summary": "Listar reservas",
+                "description": "Obtiene una lista paginada de todas las reservas. Accesible para usuarios y administradores autenticados.",
                 "operationId": "c0ead7ee8da750a341eeff509f3af8b9",
                 "responses": {
                     "200": {
@@ -1129,6 +1259,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No hay reservas disponibles",
                         "content": {
@@ -1161,6 +1301,7 @@
                     "Reservations"
                 ],
                 "summary": "Crear una nueva reserva",
+                "description": "Crea una nueva reserva en el sistema. Accesible para usuarios y administradores autenticados.",
                 "operationId": "ab4d7952bb3ef1ccd7724e8d862b034b",
                 "requestBody": {
                     "required": true,
@@ -1188,6 +1329,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1236,6 +1387,7 @@
                     "Reservations"
                 ],
                 "summary": "Mostrar detalles de una reserva",
+                "description": "Obtiene los detalles de una reserva específica. Accesible para usuarios y administradores autenticados.",
                 "operationId": "49499ada3f4d3680e147782d33573252",
                 "parameters": [
                     {
@@ -1265,6 +1417,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1301,6 +1463,7 @@
                     "Reservations"
                 ],
                 "summary": "Actualizar una reserva existente",
+                "description": "Actualiza los datos de una reserva existente. Accesible para usuarios y administradores autenticados.",
                 "operationId": "4a219e5cfd9760d12da084929201d042",
                 "parameters": [
                     {
@@ -1340,6 +1503,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1386,6 +1559,7 @@
                     "Reservations"
                 ],
                 "summary": "Eliminar una reserva",
+                "description": "Elimina una reserva del sistema. Accesible para usuarios y administradores autenticados.",
                 "operationId": "b97e0df7036fa97413d6b819cf61a11e",
                 "parameters": [
                     {
@@ -1420,6 +1594,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al eliminar la reserva",
                         "content": {
@@ -1444,6 +1628,7 @@
                     "Sports"
                 ],
                 "summary": "Listar deportes",
+                "description": "Obtiene una lista paginada de todos los deportes. Accesible para usuarios y administradores autenticados.",
                 "operationId": "8171a98b44afe5a0817781eed04221fb",
                 "responses": {
                     "200": {
@@ -1480,6 +1665,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No hay deportes disponibles",
                         "content": {
@@ -1511,7 +1706,8 @@
                 "tags": [
                     "Sports"
                 ],
-                "summary": "Crear un nuevo deporte",
+                "summary": "Crear un nuevo deporte (Solo Admins)",
+                "description": "Crea un nuevo deporte en el sistema. Requiere rol de administrador.",
                 "operationId": "985d0ccb04225afb2d090fb71cb7d059",
                 "requestBody": {
                     "required": true,
@@ -1539,6 +1735,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1587,6 +1793,7 @@
                     "Sports"
                 ],
                 "summary": "Mostrar detalles de un deporte",
+                "description": "Obtiene los detalles de un deporte específico. Accesible para usuarios y administradores autenticados.",
                 "operationId": "b8a8723a0a73b793da9a97c2e538f64f",
                 "parameters": [
                     {
@@ -1616,6 +1823,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1651,7 +1868,8 @@
                 "tags": [
                     "Sports"
                 ],
-                "summary": "Actualizar un deporte existente",
+                "summary": "Actualizar un deporte existente (Solo Admins)",
+                "description": "Actualiza los datos de un deporte existente. Requiere rol de administrador.",
                 "operationId": "08935a01fafba8708378e15d0441038a",
                 "parameters": [
                     {
@@ -1691,6 +1909,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1736,7 +1964,8 @@
                 "tags": [
                     "Sports"
                 ],
-                "summary": "Eliminar un deporte",
+                "summary": "Eliminar un deporte (Solo Admins)",
+                "description": "Elimina un deporte del sistema. Requiere rol de administrador.",
                 "operationId": "390abb277eb6fb39983e919bb33015cc",
                 "parameters": [
                     {
@@ -1771,6 +2000,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al eliminar el deporte",
                         "content": {
@@ -1794,7 +2033,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Listar usuarios",
+                "summary": "Listar usuarios (Solo Admins)",
+                "description": "Obtiene una lista paginada de todos los usuarios. Requiere rol de administrador.",
                 "operationId": "7208c29037df2b8bb02499ba39ed8a78",
                 "responses": {
                     "200": {
@@ -1831,6 +2071,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No hay usuarios disponibles",
                         "content": {
@@ -1862,7 +2112,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Crear un nuevo usuario",
+                "summary": "Crear un nuevo usuario (Solo Admins)",
+                "description": "Crea un nuevo usuario en el sistema. Requiere rol de administrador.",
                 "operationId": "262eb5ca1fdea354023c0a8870442c1e",
                 "requestBody": {
                     "required": true,
@@ -1894,6 +2145,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -1941,7 +2202,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Mostrar detalles de un usuario",
+                "summary": "Mostrar detalles de un usuario (Solo Admins)",
+                "description": "Obtiene los detalles de un usuario específico. Requiere rol de administrador.",
                 "operationId": "6946bbab7898f59a09e3c8e529a38907",
                 "parameters": [
                     {
@@ -1971,6 +2233,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -2006,7 +2278,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Actualizar un usuario existente",
+                "summary": "Actualizar un usuario existente (Solo Admins)",
+                "description": "Actualiza los datos de un usuario existente. Requiere rol de administrador.",
                 "operationId": "05028d02ea3e9a99abd6260cfe05b179",
                 "parameters": [
                     {
@@ -2054,6 +2327,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Usuario no encontrado",
                         "content": {
@@ -2095,7 +2378,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Eliminar un usuario",
+                "summary": "Eliminar un usuario (Solo Admins)",
+                "description": "Elimina un usuario del sistema. Requiere rol de administrador.",
                 "operationId": "b3d28da5dc9de7fc1bd425f93b54ff7b",
                 "parameters": [
                     {
@@ -2126,6 +2410,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
