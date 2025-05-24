@@ -4,8 +4,8 @@ services:
     container_name: club_cms_webserver
     restart: unless-stopped
     ports:
-    - "8085:80"
-    - "8443:443"
+    - "80:80"
+    - "443:443"
     volumes:
     - ./club_cms:/srv
     - caddy_data:/data
@@ -26,7 +26,6 @@ services:
       - 9000
     volumes:
       - ./club_cms:/srv
-      - vendor_data:/srv/vendor
     networks:
       - laravel_network
   database:

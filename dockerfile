@@ -64,13 +64,8 @@ RUN chown -R www-data:www-data /srv/storage /srv/bootstrap/cache
 # Instalar dependencias de Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Copiar entrypoint personalizado
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 USER www-data
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
