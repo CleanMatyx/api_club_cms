@@ -26,6 +26,7 @@ class CourtController extends Controller
      * @OA\Get(
      *  path="/courts",
      *  summary="Listar pistas",
+     *  description="Obtiene una lista paginada de todas las pistas. Accesible para usuarios y administradores autenticados.",
      *  tags={"Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Response(
@@ -43,6 +44,11 @@ class CourtController extends Controller
      *    @OA\Property(property="total_pages", type="integer", example=5),
      *    @OA\Property(property="total_courts", type="integer", example=50)
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -94,7 +100,8 @@ class CourtController extends Controller
     /**
      * @OA\Post(
      *  path="/courts",
-     *  summary="Crear una nueva pista",
+     *  summary="Crear una nueva pista (Solo Admins)",
+     *  description="Crea una nueva pista en el sistema. Requiere rol de administrador.",
      *  tags={"Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -110,6 +117,11 @@ class CourtController extends Controller
      *    @OA\Property(property="message", type="string", example="Pista creada correctamente"),
      *    @OA\Property(property="court", ref="#/components/schemas/CourtResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -165,6 +177,7 @@ class CourtController extends Controller
      * @OA\Get(
      *  path="/courts/{id}",
      *  summary="Mostrar detalles de una pista",
+     *  description="Obtiene los detalles de una pista específica. Accesible para usuarios y administradores autenticados.",
      *  tags={"Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -182,6 +195,11 @@ class CourtController extends Controller
      *     @OA\Property(property="ok", type="boolean", example=true),
      *     @OA\Property(property="court", ref="#/components/schemas/CourtResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -229,7 +247,8 @@ class CourtController extends Controller
     /**
      * @OA\Put(
      *  path="/courts/{id}",
-     *  summary="Actualizar una pista existente",
+     *  summary="Actualizar una pista existente (Solo Admins)",
+     *  description="Actualiza los datos de una pista existente. Requiere rol de administrador.",
      *  tags={"Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -252,6 +271,11 @@ class CourtController extends Controller
      *    @OA\Property(property="message", type="string",  example="Pista actualizada correctamente"),
      *    @OA\Property(property="court", ref="#/components/schemas/CourtResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -305,7 +329,8 @@ class CourtController extends Controller
     /**
      * @OA\Delete(
      *  path="/courts/{id}",
-     *  summary="Eliminar una pista",
+     *  summary="Eliminar una pista (Solo Admins)",
+     *  description="Elimina una pista del sistema. Requiere rol de administrador.",
      *  tags={"Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -323,6 +348,11 @@ class CourtController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="message", type="string",  example="Pista eliminada correctamente")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=500,
@@ -360,6 +390,7 @@ class CourtController extends Controller
      * @OA\Post(
      *  path="/courts/search",
      *  summary="Buscar disponibilidad de pistas y horas para un deporte, un socio y una fecha",
+     *  description="Busca la disponibilidad de pistas para un deporte específico en una fecha determinada. Accesible para usuarios y administradores autenticados.",
      *  tags={"Search Courts"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -410,6 +441,11 @@ class CourtController extends Controller
      *     )
      *    )
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=400,

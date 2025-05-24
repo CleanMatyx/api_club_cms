@@ -22,6 +22,7 @@ class SportController extends Controller
      * @OA\Get(
      *   path="/sports",
      *   summary="Listar deportes",
+     *   description="Obtiene una lista paginada de todos los deportes. Accesible para usuarios y administradores autenticados.",
      *   tags={"Sports"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Response(
@@ -39,6 +40,11 @@ class SportController extends Controller
      *       @OA\Property(property="total_pages", type="integer", example=5),
      *       @OA\Property(property="total_sports", type="integer", example=50)
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=404,
@@ -90,7 +96,8 @@ class SportController extends Controller
     /**
      * @OA\Post(
      *  path="/sports",
-     *  summary="Crear un nuevo deporte",
+     *  summary="Crear un nuevo deporte (Solo Admins)",
+     *  description="Crea un nuevo deporte en el sistema. Requiere rol de administrador.",
      *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -105,6 +112,11 @@ class SportController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -160,6 +172,7 @@ class SportController extends Controller
      * @OA\Get(
      *  path="/sports/{id}",
      *  summary="Mostrar detalles de un deporte",
+     *  description="Obtiene los detalles de un deporte específico. Accesible para usuarios y administradores autenticados.",
      *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -177,6 +190,11 @@ class SportController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -224,7 +242,8 @@ class SportController extends Controller
     /**
      * @OA\Put(
      *  path="/sports/{id}",
-     *  summary="Actualizar un deporte existente",
+     *  summary="Actualizar un deporte existente (Solo Admins)",
+     *  description="Actualiza los datos de un deporte existente. Requiere rol de administrador.",
      *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -246,6 +265,11 @@ class SportController extends Controller
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
+     *  ),
+     *  @OA\Response(
+     *   response=401,
+     *   description="No autorizado - Token inválido o faltante",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=404,
@@ -297,7 +321,8 @@ class SportController extends Controller
     /**
      * @OA\Delete(
      *   path="/sports/{id}",
-     *   summary="Eliminar un deporte",
+     *   summary="Eliminar un deporte (Solo Admins)",
+     *   description="Elimina un deporte del sistema. Requiere rol de administrador.",
      *   tags={"Sports"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Parameter(
@@ -315,6 +340,11 @@ class SportController extends Controller
      *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(property="message", type="string", example="Deporte eliminado correctamente")
      *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="No autorizado - Token inválido o faltante",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=500,

@@ -26,6 +26,7 @@ class AuthController extends Controller
      * @OA\Post(
      *  path="/auth/login",
      *  summary="Iniciar sesión",
+     *  description="Autentica un usuario en el sistema utilizando email y contraseña.",
      *  tags={"Auth"},
      *  @OA\RequestBody(
      *    required=true,
@@ -84,12 +85,18 @@ class AuthController extends Controller
      * @OA\Post(
      *  path="/auth/logout",
      *  summary="Cerrar sesión",
+     *  description="Cierra la sesión del usuario autenticado invalidando su token. Accesible para usuarios y administradores autenticados.",
      *  tags={"Auth"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Response(
      *    response=200,
      *    description="Logout exitoso",
      *    @OA\JsonContent(ref="#/components/schemas/LogoutResponse")
+     *  ),
+     *  @OA\Response(
+     *    response=401,
+     *    description="No autorizado - Token inválido o faltante",
+     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *    response=500,
@@ -118,9 +125,9 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *  path="/auth/register",
-     *  summary="Crear un nuevo usuario",
+     *  summary="Registrar un nuevo usuario",
+     *  description="Registra un nuevo usuario en el sistema y crea automáticamente su perfil de miembro.",
      *  tags={"Auth"},
-     *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
      *   required=true,
      *   @OA\JsonContent(ref="#/components/schemas/UserRequest")
@@ -148,31 +155,42 @@ class AuthController extends Controller
      * )
      */
     public function register(UserRequest $request) {
-        try {
-            $user = User::create($request->validated());
-            $member = Member::create([
-                'user_id' => $user->id,
-                'membership_date' => now()->toDateString(),
-                'status' => 'active'
-            ]);
-            return response()->json([
-                'ok' =>true,
-                'message' => 'Usuario registrado correctamente',
-                'user' => new UserResource($user),
-                'member' => new MemberResource($member)
-            ]);
-        } catch (ValidationException $e) {
+    try {
+        $user_info = $request->validated();
+        $user_info['password'] = bcrypt($user_info['password']);
+        $user_info['role'] = 'user';
+
+        if (User::where('email', $user_info['email'])->exists()) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
+                'message' => 'El correo electrónico ya está registrado'
             ], 422);
-        } catch (Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al registrar usuario por error inesperado',
-                'error' => $e->getMessage()
-            ], 500);
         }
+
+        $user = User::create($user_info);
+        $member = Member::create([
+            'user_id' => $user->id,
+            'membership_date' => now()->toDateString(),
+            'status' => 'active'
+        ]);
+        return response()->json([
+            'ok' =>true,
+            'message' => 'Usuario registrado correctamente',
+            'user' => new UserResource($user),
+            'member' => new MemberResource($member)
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'ok' => false,
+            'message' => 'Error de validación',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (Exception $e) {
+        return response()->json([
+            'ok' => false,
+            'message' => 'Error al registrar usuario por error inesperado',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 }
