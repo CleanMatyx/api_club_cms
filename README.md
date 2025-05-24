@@ -104,7 +104,7 @@
       └── vite.config.js</code></pre>
 
   <h2>Instalación y puesta en marcha</h2>
-  <p><em>El archivo <code>.env</code> ya viene incluido y configurado en el repositorio. <strong>No es necesario</strong> copiar ni editar nada para el despliegue inicial.</em></p>
+  <p><em>El archivo <code>.env</code> ya viene incluido y configurado en el repositorio. En principio <strong>no es necesario</strong> copiar ni editar nada para el despliegue inicial.</em></p>
   <ol>
     <li>
       <strong>Clona el proyecto:</strong>
@@ -132,6 +132,13 @@ cd club_cms</code></pre>
     <li>
       <strong>Ejecuta en terminal para obtener el Personal accsess client</strong>
       <pre><code>php artisan passport:client --personal</code></pre>
+      <strong>Aparecerá el formulario</strong>
+      <strong>Ingresa nombre o pulsa enter para continuar con 'Laravel'</strong>
+      <pre>What should we name the client? [Laravel]</pre>
+      <strong>Pulsamos enter otra vez'</strong>
+      <pre>Which user provider should this client use to retrieve users? [users]</pre>
+      <strong>Y se habrá confugurado el nuevo cliente personal</strong>
+      <pre> INFO  New client created successfully.</pre>
     </li>
   </ol>
 
@@ -151,31 +158,10 @@ cd club_cms</code></pre>
     </li>
   </ul>
   <h3>Comandos útiles de Artisan</h3>
-  <pre><code>
-    docker-compose exec club_cms_php php artisan route:clear
-    docker-compose exec club_cms_php php artisan route:list</code></pre>
+  <pre><code>docker-compose exec club_cms_php php artisan route:clear</code></pre>
+  <pre><code>docker-compose exec club_cms_php php artisan route:list</code></pre>
   <p>Para detener y eliminar todo:</p>
   <pre><code>docker-compose down -v</code></pre>
-
-  <h2>⚙Variables de entorno principal</h2>
-  <pre><code>APP_NAME=Club CMS
-APP_ENV=local
-APP_KEY=base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-APP_DEBUG=true
-APP_URL=http://localhost
-
-DB_CONNECTION=mysql
-DB_HOST=database
-DB_PORT=3306
-DB_DATABASE=club_cms_db
-DB_USERNAME=root
-DB_PASSWORD=dwes
-
-BROADCAST_DRIVER=log
-CACHE_DRIVER=file
-QUEUE_CONNECTION=sync
-SESSION_DRIVER=file
-SESSION_LIFETIME=120</code></pre>
 
   <h2>Contacto</h2>
   <ul>
