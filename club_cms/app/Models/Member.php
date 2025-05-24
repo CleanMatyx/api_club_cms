@@ -24,6 +24,7 @@ class Member extends Model
         'user_id',
         'membership_date',
         'status',
+        'role',
     ];
 
     /**
@@ -31,20 +32,6 @@ class Member extends Model
      */
     public function reservations() {
         return $this->hasMany(Reservation::class);
-    }
-
-    /**
-     * Find if the member has less than 3 reservations for a given date.
-     */
-    public function checkTotalReservations(Carbon $date) {
-        return $this->reservations()->whereDate('date', $date)->count() < 3;
-    }
-
-    /**
-     * Check if the member has a reservation for the same hour on a given date and hour.
-     */
-    public function checkSameHourReservation(Carbon $date, $hour) {
-        return $this->reservations()->whereDate('date', $date)->where('hour', $hour)->exists();
     }
 
     /**
