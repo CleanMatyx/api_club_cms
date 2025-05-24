@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\UserController;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 Route::apiResource('/courts', CourtController::class)->middleware('auth:api');
 Route::post('/courts/search', [CourtController::class, 'search'])->middleware('auth:api');
