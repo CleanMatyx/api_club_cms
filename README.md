@@ -122,29 +122,34 @@ cd club_cms</code></pre>
       </ul>
     </li>
     <li>
+      <strong>Ingresar en la shell de PHP:</strong>
+      <pre><code>docker-compose exec club_cms_php</code></pre>
+    </li>
+    <li>
       <strong>Instalación de dependencias:</strong>
-      <pre><code>docker-compose exec club_cms_php composer install</code></pre>
+      <pre><code>composer install</code></pre>
     </li>
     <li>
       <strong>Crea y rellena la base de datos de demo:</strong>
-      <pre><code>docker-compose exec club_cms_php php artisan migrate:fresh --seed</code></pre>
+      <pre><code>php artisan migrate:fresh --seed</code></pre>
     </li>
     <li>
       <strong>Ejecuta en terminal para obtener el Personal accsess client</strong>
       <pre><code>php artisan passport:client --personal</code></pre>
-      <strong>Aparecerá el formulario</strong>
-      <strong>Ingresa nombre o pulsa enter para continuar con 'Laravel'</strong>
-      <pre>What should we name the client? [Laravel]</pre>
-      <strong>Pulsamos enter otra vez'</strong>
-      <pre>Which user provider should this client use to retrieve users? [users]</pre>
-      <strong>Y se habrá confugurado el nuevo cliente personal</strong>
-      <pre> INFO  New client created successfully.</pre>
+      <ul>
+        <strong>Aparecerá el formulario</strong>
+        <strong>Ingresa nombre o pulsa enter para continuar con 'Laravel'</strong>
+        <pre>What should we name the client? [Laravel]</pre>
+        <strong>Pulsamos enter otra vez'</strong>
+        <pre>Which user provider should this client use to retrieve users? [users]</pre>
+        <strong>Y se habrá confugurado el nuevo cliente personal</strong>
+        <pre> INFO  New client created successfully.</pre>
+      </ul>
     </li>
   </ol>
 
   <h2>Uso diario</h2>
   <ul>
-    <li>Accede a la aplicación en: <a href="http://localhost">http://localhost</a></li>
     <li>Swagger UI en: <a href="http://localhost/api/documentation">/api/documentation</a></li>
     <li>Colección Postman: <code>postman/ClubCMS.postman_collection.json</code></li>
   </ul>
@@ -158,11 +163,12 @@ cd club_cms</code></pre>
     </li>
   </ul>
   <h3>Comandos útiles de Artisan</h3>
-  <pre><code>docker-compose exec club_cms_php php artisan route:clear</code></pre>
-  <pre><code>docker-compose exec club_cms_php php artisan route:list</code></pre>
-  <p>Para detener y eliminar todo:</p>
-  <pre><code>docker-compose down -v</code></pre>
-
+  <ul> 
+    <li><pre><code>docker-compose exec club_cms_php php artisan route:clear</code></pre></li>
+    <li><pre><code>docker-compose exec club_cms_php php artisan route:list</code></pre></li>
+    <li><p>Para detener y eliminar todo:</p>
+        <pre><code>docker-compose down -v</code></pre></li>
+  </ul>
   <h2>Contacto</h2>
   <ul>
     <li>GitHub: <a href="https://github.com/CleanMatyx">CleanMatyx</a></li>
