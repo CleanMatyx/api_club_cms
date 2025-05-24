@@ -122,10 +122,8 @@ cd club_cms</code></pre>
       </ul>
     </li>
     <li>
-      <strong>Instala dependencias y compila assets:</strong>
-      <pre><code>docker-compose exec club_cms_php composer install --no-dev --optimize-autoloader
-docker-compose exec club_cms_php npm install
-docker-compose exec club_cms_php npm run build</code></pre>
+      <strong>Instalación de dependencias:</strong>
+      <pre><code>docker-compose exec club_cms_php composer install</code></pre>
     </li>
     <li>
       <strong>Crea y rellena la base de datos de demo:</strong>
@@ -153,9 +151,9 @@ docker-compose exec club_cms_php npm run build</code></pre>
     </li>
   </ul>
   <h3>Comandos útiles de Artisan</h3>
-  <pre><code>docker-compose exec club_cms_php php artisan tinker
-docker-compose exec club_cms_php php artisan route:list
-docker-compose exec club_cms_php php artisan config:cache</code></pre>
+  <pre><code>
+    docker-compose exec club_cms_php php artisan route:clear
+    docker-compose exec club_cms_php php artisan route:list</code></pre>
   <p>Para detener y eliminar todo:</p>
   <pre><code>docker-compose down -v</code></pre>
 
@@ -179,22 +177,12 @@ QUEUE_CONNECTION=sync
 SESSION_DRIVER=file
 SESSION_LIFETIME=120</code></pre>
 
-  <h2>Contribuciones</h2>
-  <ol>
-    <li>Haz un <em>fork</em> del repositorio.</li>
-    <li>Crea una rama feature:<br>
-      <pre><code>git checkout -b feature/mi-nueva-funcionalidad</code></pre>
-    </li>
-    <li>Realiza tus cambios, añade tests y documentación.</li>
-    <li>Envía un <em>pull request</em> describiendo tu aporte.</li>
-  </ol>
-
   <h2>Contacto</h2>
   <ul>
     <li>GitHub: <a href="https://github.com/CleanMatyx">CleanMatyx</a></li>
     <li>Email: <a href="mailto:mtsbrr07@gmail.com">Correo</a></li>
   </ul>
 
-  <p style="text-align:center; margin-top:2em;">¡Gracias por usar <strong>Club CMS</strong>! 🚀</p>
+  <p style="text-align:center; margin-top:2em;">¡Gracias por usar <strong>Club CMS</strong>!</p>
 
 </body>
