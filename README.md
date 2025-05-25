@@ -123,7 +123,7 @@ cd club_cms</code></pre>
     </li>
     <li>
       <strong>Ingresar en la shell de PHP:</strong>
-      <pre><code>docker-compose exec club_cms_php</code></pre>
+      <pre><code>docker-compose exec club_cms_php sh</code></pre>
     </li>
     <li>
       <strong>Instalación de dependencias:</strong>
