@@ -119,8 +119,8 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Registrar un nuevo usuario",
-                "description": "Registra un nuevo usuario en el sistema y crea automáticamente su perfil de miembro.",
+                "summary": "Registrar un nuevo usuario del sistema",
+                "description": "Registra un nuevo usuario del sistema (empleado/administrador) para acceso al CMS. Los socios se gestionan por separado.",
                 "operationId": "08136088c4862c313b35d6518bab8d3a",
                 "requestBody": {
                     "required": true,
@@ -147,8 +147,8 @@
                                             "type": "string",
                                             "example": "Usuario registrado correctamente"
                                         },
-                                        "court": {
-                                            "$ref": "#/components/schemas/CourtResource"
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserResource"
                                         }
                                     },
                                     "type": "object"
@@ -167,7 +167,7 @@
                         }
                     },
                     "500": {
-                        "description": "Error al crear la pista",
+                        "description": "Error al registrar usuario",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -895,20 +895,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Miembro creado correctamente"
-                                        },
-                                        "member": {
-                                            "$ref": "#/components/schemas/MemberResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MemberCreateResponse"
                                 }
                             }
                         }
@@ -1073,20 +1060,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Miembro actualizado correctamente"
-                                        },
-                                        "member": {
-                                            "$ref": "#/components/schemas/MemberResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MemberUpdateResponse"
                                 }
                             }
                         }
@@ -1301,7 +1275,7 @@
                     "Reservations"
                 ],
                 "summary": "Crear una nueva reserva",
-                "description": "Crea una nueva reserva en el sistema. Accesible para usuarios y administradores autenticados.",
+                "description": "Crea una nueva reserva en el sistema. Valida límites de reservas (máximo 3 por día) y previene duplicados.",
                 "operationId": "ab4d7952bb3ef1ccd7724e8d862b034b",
                 "requestBody": {
                     "required": true,
@@ -1319,16 +1293,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "reservation": {
-                                            "$ref": "#/components/schemas/ReservationResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ReservationCreateResponse"
                                 }
                             }
                         }
@@ -1344,7 +1309,7 @@
                         }
                     },
                     "404": {
-                        "description": "Reserva no encontrada",
+                        "description": "Miembro o cancha no encontrados",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1354,7 +1319,7 @@
                         }
                     },
                     "422": {
-                        "description": "Error de validación",
+                        "description": "Error de validación - Límites de reserva excedidos o datos inválidos",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1463,7 +1428,7 @@
                     "Reservations"
                 ],
                 "summary": "Actualizar una reserva existente",
-                "description": "Actualiza los datos de una reserva existente. Accesible para usuarios y administradores autenticados.",
+                "description": "Actualiza los datos de una reserva existente. Valida límites de reservas y previene duplicados.",
                 "operationId": "4a219e5cfd9760d12da084929201d042",
                 "parameters": [
                     {
@@ -1493,16 +1458,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "ok": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "reservation": {
-                                            "$ref": "#/components/schemas/ReservationResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ReservationUpdateResponse"
                                 }
                             }
                         }
@@ -1528,7 +1484,7 @@
                         }
                     },
                     "422": {
-                        "description": "Error de validación",
+                        "description": "Error de validación - Límites de reserva excedidos o datos inválidos",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2496,14 +2452,23 @@
             },
             "MemberRequest": {
                 "required": [
-                    "user_id",
+                    "name",
                     "membership_date",
                     "status"
                 ],
                 "properties": {
-                    "user_id": {
-                        "type": "integer",
-                        "example": 12
+                    "name": {
+                        "type": "string",
+                        "example": "Juan Pérez"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "juan@email.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+34 123 456 789"
                     },
                     "membership_date": {
                         "type": "string",
@@ -2512,6 +2477,11 @@
                     },
                     "status": {
                         "type": "string",
+                        "enum": [
+                            "active",
+                            "inactive",
+                            "suspended"
+                        ],
                         "example": "active"
                     }
                 },
@@ -2527,6 +2497,15 @@
                         "type": "string",
                         "example": "Juan Pérez"
                     },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "juan@email.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+34 123 456 789"
+                    },
                     "membership_date": {
                         "type": "string",
                         "format": "date",
@@ -2534,7 +2513,78 @@
                     },
                     "status": {
                         "type": "string",
+                        "enum": [
+                            "active",
+                            "inactive",
+                            "suspended"
+                        ],
                         "example": "active"
+                    },
+                    "has_system_access": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "user": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 12
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Juan Pérez"
+                            },
+                            "role": {
+                                "type": "string",
+                                "enum": [
+                                    "user",
+                                    "admin"
+                                ],
+                                "example": "user"
+                            }
+                        },
+                        "type": "object",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "MemberCreateResponse": {
+                "properties": {
+                    "ok": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Miembro creado correctamente"
+                    },
+                    "member": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 32
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Juan Pérez"
+                            },
+                            "membership_date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-01-01"
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "active",
+                                    "inactive",
+                                    "suspended"
+                                ],
+                                "example": "active"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"
@@ -2654,6 +2704,14 @@
                         "type": "string",
                         "format": "password",
                         "example": "contraseña123"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "user",
+                            "admin"
+                        ],
+                        "example": "user"
                     }
                 },
                 "type": "object"
@@ -2672,6 +2730,19 @@
                         "type": "string",
                         "format": "email",
                         "example": "correo@correo.com"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "user",
+                            "admin"
+                        ],
+                        "example": "user"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-05-25T10:30:00Z"
                     }
                 },
                 "type": "object"
@@ -2768,16 +2839,140 @@
                     "errors": {
                         "description": "Listado de errores de validación por campo",
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "example": [
-                                "The selected sport id is invalid."
+                        "example": {
+                            "email": [
+                                "El correo electrónico ya está registrado por otro miembro."
                             ],
-                            "property": "validationErrorResponse"
+                            "member_id": [
+                                "El miembro ya tiene el máximo de 3 reservas permitidas para esta fecha."
+                            ],
+                            "court_id": [
+                                "Ya existe una reserva para esta cancha en la misma fecha y hora."
+                            ],
+                            "date": [
+                                "La fecha no puede ser anterior a hoy."
+                            ]
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "MemberUpdateResponse": {
+                "properties": {
+                    "ok": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Miembro actualizado correctamente"
+                    },
+                    "member": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 32
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Juan Pérez"
+                            },
+                            "membership_date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-01-01"
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "active",
+                                    "inactive",
+                                    "suspended"
+                                ],
+                                "example": "active"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ReservationCreateResponse": {
+                "properties": {
+                    "ok": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Reserva creada correctamente"
+                    },
+                    "reservation": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 25
+                            },
+                            "member_id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "court_name": {
+                                "type": "string",
+                                "example": "Pista 1"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-01-01"
+                            },
+                            "hour": {
+                                "type": "string",
+                                "format": "time",
+                                "example": "14:00"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ReservationUpdateResponse": {
+                "properties": {
+                    "ok": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Reserva actualizada correctamente"
+                    },
+                    "reservation": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 25
+                            },
+                            "member_id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "court_name": {
+                                "type": "string",
+                                "example": "Pista 1"
+                            },
+                            "date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-01-01"
+                            },
+                            "hour": {
+                                "type": "string",
+                                "format": "time",
+                                "example": "14:00"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"

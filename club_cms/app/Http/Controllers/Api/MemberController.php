@@ -107,12 +107,7 @@ class MemberController extends Controller
      *  @OA\Response(
      *   response=201,
      *   description="Miembro creado correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="message", type="string", example="Miembro creado correctamente"),
-     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/MemberCreateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,
@@ -257,12 +252,7 @@ class MemberController extends Controller
      *  @OA\Response(
      *   response=200,
      *   description="Miembro actualizado correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="message", type="string", example="Miembro actualizado correctamente"),
-     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/MemberUpdateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,

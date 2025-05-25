@@ -98,7 +98,7 @@ class ReservationController extends Controller
      * @OA\Post(
      *  path="/reservations",
      *  summary="Crear una nueva reserva",
-     *  description="Crea una nueva reserva en el sistema. Accesible para usuarios y administradores autenticados.",
+     *  description="Crea una nueva reserva en el sistema. Valida límites de reservas (máximo 3 por día) y previene duplicados.",
      *  tags={"Reservations"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -108,11 +108,7 @@ class ReservationController extends Controller
      *  @OA\Response(
      *   response=201,
      *   description="Reserva creada correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/ReservationCreateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,
@@ -121,12 +117,12 @@ class ReservationController extends Controller
      *  ),
      *  @OA\Response(
      *   response=404,
-     *   description="Reserva no encontrada",
+     *   description="Miembro o cancha no encontrados",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *   response=422,
-     *   description="Error de validación",
+     *   description="Error de validación - Límites de reserva excedidos o datos inválidos",
      *   @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *  ),
      *  @OA\Response(
@@ -245,7 +241,7 @@ class ReservationController extends Controller
      * @OA\Put(
      *  path="/reservations/{id}",
      *  summary="Actualizar una reserva existente",
-     *  description="Actualiza los datos de una reserva existente. Accesible para usuarios y administradores autenticados.",
+     *  description="Actualiza los datos de una reserva existente. Valida límites de reservas y previene duplicados.",
      *  tags={"Reservations"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -262,11 +258,7 @@ class ReservationController extends Controller
      *  @OA\Response(
      *   response=200,
      *   description="Reserva actualizada correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="reservation",ref="#/components/schemas/ReservationResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/ReservationUpdateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,
@@ -280,7 +272,7 @@ class ReservationController extends Controller
      *  ),
      *  @OA\Response(
      *    response=422,
-     *    description="Error de validación",
+     *    description="Error de validación - Límites de reserva excedidos o datos inválidos",
      *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *   ),
      *  @OA\Response(

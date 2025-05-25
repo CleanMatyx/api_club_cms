@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Member extends Model
 {
@@ -21,6 +22,9 @@ class Member extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'name',
+        'email',
+        'phone',
         'user_id',
         'membership_date',
         'status',
@@ -35,9 +39,30 @@ class Member extends Model
     }
 
     /**
+     * Check if the member can make a reservation on a given date.
+     */
+    public function checkMaxReservations(Carbon $date) {
+        $reservationsCount = $this->reservations()->whereDate('date', $date)->count();
+        return $reservationsCount < 3;
+    }        
+
+    /**
      * Get the user associated with the member.
      */
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Check if the member has a reservation for the same court, date and hour.
+     */
+    public function checkReservationsSameDate($courtId, Carbon $date, $hour) {
+        $existingReservation = $this->reservations()
+            ->where('court_id', $courtId)
+            ->whereDate('date', $date)
+            ->whereTime('hour', $hour)
+            ->first();
+        
+        return $existingReservation === null;
     }
 }

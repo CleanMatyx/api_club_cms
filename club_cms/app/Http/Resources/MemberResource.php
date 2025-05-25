@@ -16,7 +16,7 @@ class MemberResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->user ? $this->user->name : null,
+            'name' => $this->name,
             'membership_date' => $this->membership_date,
             'status' => $this->status,
         ];
