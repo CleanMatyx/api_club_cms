@@ -1,180 +1,408 @@
+# Club CMS
 
-<body>
+Un sistema de gestión de contenido (CMS) para club deportivo, construido con **Laravel 12.x**, **PHP 8.2**, **MySQL 8.1** y desplegado mediante **Docker** + **Docker Compose**, con **Caddy** como servidor web.
 
-  <h1>Club CMS</h1>
-  <p>Un sistema de gestión de contenido (<strong>CMS</strong>), construido con <strong>Laravel 12.x</strong>, <strong>PHP 8.2</strong>, <strong>MySQL 8.1</strong> y desplegado mediante <strong>Docker</strong> + <strong>Docker Compose</strong>, con <strong>Caddy</strong> como servidor web.</p>
+## Tabla de contenidos
+- [Descripción del proyecto](#-descripción-del-proyecto)
+- [Funcionalidades](#-funcionalidades)
+- [Lógica de negocio](#-lógica-de-negocio)
+- [Instalación y puesta en marcha](#-instalación-y-puesta-en-marcha)
+- [Ejemplos de uso de la API](#-ejemplos-de-uso-de-la-api)
+- [Comandos útiles para desarrollo](#️-comandos-útiles-para-desarrollo)
+- [Documentación y herramientas](#-documentación-y-herramientas)
+- [Autenticación y autorización](#-autenticación-y-autorización)
+- [Arquitectura técnica](#️-arquitectura-técnica)
+- [Contribución](#-contribución)
+- [Contacto](#-contacto)
 
-  <h2>Descripción del proyecto</h2>
-  <p>Este proyecto proporciona una <strong>API REST</strong> para la gestión de un club deportivo. Consta de dos áreas principales:</p>
-  <ul>
-    <li><strong>Panel de gestión:</strong> Control de acceso, usuarios, permisos y administración general de la aplicación.</li>
-    <li><strong>Gestión de club polideportivo:</strong> CRUD de socios, pistas, reservas, y lógica de negocio para el sistema de reservas.</li>
-  </ul>
+## Descripción del proyecto
 
-  <h2>Funcionalidad exigida</h2>
-  <ul>
-    <li><strong>CRUD de Usuarios:</strong> Registro, login, logout y gestión de roles/ permisos.</li>
-    <li><strong>CRUD de Deportes:</strong> (Tenis, Pádel, Fútbol, Baloncesto...)</li>
-    <li><strong>CRUD de Pistas:</strong> Cada pista asociada a un único deporte.</li>
-    <li><strong>CRUD de Socios:</strong> Gestión de datos de los miembros del club.</li>
-    <li><strong>CRUD de Reservas:</strong> Un socio reserva una pista para una franja horaria.</li>
-    <li><strong>Buscador de Pistas:</strong> Dada una fecha, deporte y socio, devuelve las pistas disponibles.</li>
-    <li><strong>Listado de Reservas del Día:</strong> Dada una fecha, devuelve todas las reservas confirmadas con datos de pista, socio y deporte.</li>
-  </ul>
+Este proyecto proporciona una **API REST** para la gestión completa de un club deportivo. Consta de dos áreas principales:
 
-  <h2>Lógica de negocio</h2>
-  <ul>
-    <li>Reservas disponibles entre las <strong>08:00</strong> y las <strong>22:00</strong> de lunes a domingo en franjas de 1 hora.</li>
-    <li>No se permiten dos reservas de la misma pista en la misma franja horaria.</li>
-    <li>Un socio no puede reservar más de 2 pistas simultáneamente y un máximo de 3 reservas por día.</li>
-  </ul>
+- **Panel de gestión:** Control de acceso, usuarios, permisos y administración general de la aplicación.
+- **Gestión de club polideportivo:** CRUD de socios, pistas, reservas, y lógica de negocio para el sistema de reservas.
 
-  <h2>Entrega y documentación</h2>
-  <ul>
-    <li>Scripts de base de datos:
-      <ul>
-        <li><code>schema.sql</code> – Estructura completa de tablas.</li>
-        <li><code>database/seeders</code> – Datos iniciales de ejemplo mediante migración con seeders.</li>
-      </ul>
-    </li>
-    <li>Especificación de la API en Swagger (JSON): <code>storage/api-docs/api-docs.json</code></li>
-    <li>Esquema entidad-relación de la base de datos (PDF): <code>er-diagram.pdf</code></li>
-    <li>Colección Postman para pruebas: <code>ClubCMS.postman_collection.json</code></li>
-    <li>Archivo de instrucciones (este README).</li>
-  </ul>
+## Funcionalidades
 
-  <h2>Características principales</h2>
-  <ul>
-    <li>API RESTful documentada con <strong>Swagger UI</strong> en <code>/api/documentation</code></li>
-    <li><p>Se utiliza <strong>Laravel Passport</strong> para OAuth2 y gestión de tokens de acceso.</p></li>
-    <li>Migraciones, seeders y factories para desarrollo y demo</li>
-    <li>Despliegue con Docker</li>
-    <li><p>Aplicación API REST. No hay interfaz web excepto la documentación de la API con <strong>Swagger UI</strong>.</p></li>
-    <li><p>Documentación disponible en <a href="http://localhost/api/documentation">/api/documentation</a>.</p></li>
-  </ul>
+### Gestión de Usuarios
+- **CRUD de Usuarios:** Registro, login, logout y gestión de roles/permisos.
+- Autenticación OAuth2 con Laravel Passport
+- Roles: `admin` y `user`
 
-  <h2>Requisitos / Versiones</h2>
-  <ul>
-    <li>Docker ≥ 20.10</li>
-    <li>Docker Compose ≥ 1.29</li>
-    <li>Git ≥ 2.30</li>
-    <li>Laravel 12.x</li>
-    <li>PHP 8.2</li>
-    <li>MySQL 8.1</li>
-  </ul>
+### Gestión de Club
+- **CRUD de Deportes:** (Tenis, Pádel, Fútbol, Baloncesto...)
+- **CRUD de Pistas:** Cada pista asociada a un único deporte
+- **CRUD de Socios:** Gestión de datos de los miembros del club
+- **CRUD de Reservas:** Un socio reserva una pista para una franja horaria
+- **Buscador de Pistas:** Dada una fecha, deporte y socio, devuelve las pistas disponibles
+- **Listado de Reservas del Día:** Dada una fecha, devuelve todas las reservas confirmadas
 
-  <h2>Estructura del repositorio</h2>
-  <pre><code>├── Caddyfile
-├── dockerfile
-├── docker-compose.yml
-└── club_cms
-      ├── app
-      │   ├── Http
-      │   ├── Models
-      │   ├── OpenApi
-      │   └── Providers
-      ├── artisan
-      ├── bootstrap
-      ├── composer.json
-      ├── composer.lock
-      ├── config
-      ├── database
-      │   ├── database.sqlite
-      │   ├── factories
-      │   ├── migrations
-      │   └── seeders
-      ├── package.json
-      ├── phpunit.xml
-      ├── public
-      ├── README.md
-      ├── resources
-      ├── routes
-      │   ├── api.php
-      │   ├── console.php
-      │   └── web.php
-      ├── storage
-      │   ├── api-docs
-      │   ├── app
-      │   ├── framework
-      │   ├── logs
-      │   ├── oauth-private.key
-      │   └── oauth-public.key
-      ├── tests
-      ├── vendor
-      └── vite.config.js</code></pre>
+## Lógica de negocio
 
-  <h2>Instalación y puesta en marcha</h2>
-  <p><em>El archivo <code>.env</code> ya viene incluido y configurado en el repositorio. En principio <strong>no es necesario</strong> copiar ni editar nada para el despliegue inicial.</em></p>
-  <ol>
-    <li>
-      <strong>Clona el proyecto:</strong>
-      <pre><code>git clone https://github.com/tu-usuario/club_cms.git
-cd club_cms</code></pre>
-    </li>
-    <li>
-      <strong>Arranca los contenedores:</strong>
-      <pre><code>docker compose up -d</code></pre>
-      <p>Servicios levantados:</p>
-      <ul>
-        <li><code>club_cms_webserver</code> (Caddy puertos 80/443)</li>
-        <li><code>club_cms_php</code> (PHP-FPM 8.2)</li>
-        <li><code>club_cms_database</code> (MySQL 8.1)</li>
-      </ul>
-    </li>
-    <li>
-      <strong>Ingresar en la shell de PHP:</strong>
-      <pre><code>docker-compose exec -it club_cms_php sh</code></pre>
-    </li>
-    <li>
-      <strong>Instalación de dependencias:</strong>
-      <pre><code>composer install</code></pre>
-    </li>
-    <li>
-      <strong>Crea y rellena la base de datos de demo:</strong>
-      <pre><code>php artisan migrate:fresh --seed</code></pre>
-    </li>
-    <li>
-      <strong>Ejecuta en terminal para obtener el Personal accsess client</strong>
-      <pre><code>php artisan passport:client --personal</code></pre>
-      <ul>
-        <strong>Aparecerá el formulario</strong>
-        <strong>Ingresa nombre o pulsa enter para continuar con 'Laravel'</strong>
-        <pre>What should we name the client? [Laravel]</pre>
-        <strong>Pulsamos enter otra vez'</strong>
-        <pre>Which user provider should this client use to retrieve users? [users]</pre>
-        <strong>Y se habrá confugurado el nuevo cliente personal</strong>
-        <pre> INFO  New client created successfully.</pre>
-      </ul>
-    </li>
-  </ol>
+- Reservas disponibles entre las **08:00** y las **22:00** de lunes a domingo en franjas de 1 hora
+- No se permiten dos reservas de la misma pista en la misma franja horaria
+- Un socio no puede reservar más de 2 pistas simultáneamente y un máximo de 3 reservas por día
 
-  <h2>Uso diario</h2>
-  <ul>
-    <li>Swagger UI en: <a href="http://localhost/api/documentation">/api/documentation</a></li>
-    <li>Colección Postman: <code>postman/ClubCMS.postman_collection.json</code></li>
-  </ul>
-  <h3>Shells de contenedores</h3>
-  <ul>
-    <li>PHP:
-      <pre><code>docker compose exec -it club_cms_php sh</code></pre>
-    </li>
-    <li>MySQL:
-      <pre><code>docker compose exec -it club_cms_database mysql -u root -p</code></pre>
-    </li>
-  </ul>
-  <h3>Comandos útiles de Artisan</h3>
-  <ul> 
-    <li><pre><code>docker compose exec -it club_cms_php php artisan route:clear</code></pre></li>
-    <li><pre><code>docker compose exec -it club_cms_php php artisan route:list</code></pre></li>
-    <li><p>Para detener y eliminar todo:</p>
-        <pre><code>docker compose down -v</code></pre></li>
-  </ul>
-  <h2>Contacto</h2>
-  <ul>
-    <li>GitHub: <a href="https://github.com/CleanMatyx">CleanMatyx</a></li>
-    <li>Email: <a href="mailto:mtsbrr07@gmail.com">Correo</a></li>
-  </ul>
+## Instalación y puesta en marcha
 
-  <p style="text-align:center; margin-top:2em;">¡Gracias por usar <strong>Club CMS</strong>!</p>
+### Prerequisitos
+- Docker ≥ 20.10
+- Docker Compose ≥ 1.29
+- Git ≥ 2.30
 
-</body>
+### Pasos de instalación
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/CleanMatyx/api_club_cms.git
+   cd api_club_cms
+   ```
+
+2. **Arranca los contenedores:**
+   ```bash
+   docker compose up -d
+   ```
+   
+   Servicios levantados:
+   - `club_cms_webserver` (Caddy puertos 80/443)
+   - `club_cms_php` (PHP-FPM 8.2)
+   - `club_cms_database` (MySQL 8.1)
+
+3. **Acceder al contenedor PHP:**
+   ```bash
+   docker compose exec -it club_cms_php sh
+   ```
+
+4. **Instalar dependencias:**
+   ```bash
+   composer install
+   ```
+
+5. **Crear y poblar la base de datos:**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+6. **Configurar Laravel Passport:**
+   ```bash
+   php artisan passport:client --personal
+   ```
+   - Presiona Enter para aceptar el nombre por defecto "Laravel"
+   - Presiona Enter nuevamente para el provider "users"
+
+### Verificación de la instalación
+
+- **API Documentation:** http://localhost/api/documentation
+- **Health Check:** Hacer una petición GET a http://localhost/api/v1/sports
+
+## Ejemplos de uso de la API
+
+### Base URL
+```
+http://localhost/api/v1
+```
+
+### 1. Autenticación
+
+<details>
+<summary>Ver ejemplos de autenticación</summary>
+
+#### Iniciar sesión
+```bash
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "admin"
+}
+```
+
+**Respuesta:**
+```json
+{
+  "ok": true,
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+}
+```
+
+#### Cerrar sesión
+```bash
+POST /auth/logout
+Authorization: Bearer {token}
+```
+
+**Respuesta:**
+```json
+{
+  "ok": true,
+  "message": "Sesión cerrada correctamente"
+}
+```
+
+</details>
+
+### 2. Gestión de Deportes
+
+<details>
+<summary>Ver ejemplos de gestión de deportes</summary>
+
+#### Listar deportes
+```bash
+GET /sports
+Authorization: Bearer {token}
+```
+
+**Respuesta:**
+```json
+{
+  "ok": true,
+  "sports": [
+    {
+      "id": 1,
+      "name": "Tenis",
+      "description": "Deporte de raqueta"
+    },
+    {
+      "id": 2,
+      "name": "Pádel",
+      "description": "Deporte de pala"
+    }
+  ],
+  "page": 1,
+  "total_pages": 1,
+  "total_sports": 2
+}
+```
+
+#### Crear deporte (Solo Admins)
+```bash
+POST /sports
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "name": "Fútbol",
+  "description": "Deporte de equipo con balón"
+}
+```
+
+</details>
+
+### 3. Gestión de Pistas
+
+<details>
+<summary>Ver ejemplos de gestión de pistas</summary>
+
+#### Listar pistas
+```bash
+GET /courts
+Authorization: Bearer {token}
+```
+
+#### Crear pista (Solo Admins)
+```bash
+POST /courts
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "sport_id": 1,
+  "name": "Pista Central",
+  "location": "Zona Norte del club"
+}
+```
+
+</details>
+
+### 4. Gestión de Socios
+
+<details>
+<summary>Ver ejemplos de gestión de socios</summary>
+
+#### Listar socios
+```bash
+GET /members
+Authorization: Bearer {token}
+```
+
+#### Crear socio (Solo Admins)
+```bash
+POST /members
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "name": "Juan Pérez",
+  "email": "juan@email.com",
+  "phone": "+34 123 456 789",
+  "membership_date": "2024-01-01",
+  "status": "active"
+}
+```
+
+</details>
+
+### 5. Gestión de Reservas
+
+<details>
+<summary>Ver ejemplos de gestión de reservas</summary>
+
+#### Crear reserva
+```bash
+POST /reservations
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "member_id": 1,
+  "court_id": 1,
+  "date": "2024-12-25",
+  "hour": "14:00"
+}
+```
+
+#### Listar reservas
+```bash
+GET /reservations
+Authorization: Bearer {token}
+```
+
+</details>
+
+### 6. Búsqueda de disponibilidad
+
+<details>
+<summary>Ver ejemplo de búsqueda de disponibilidad</summary>
+
+#### Buscar pistas disponibles
+```bash
+POST /courts/search?sport_name=tenis&date=25/12/2024&member_id=1
+Authorization: Bearer {token}
+```
+
+**Respuesta:**
+```json
+{
+  "ok": true,
+  "available_hours": [
+    {
+      "id": 1,
+      "name": "Pista Central",
+      "hours_free": [8, 9, 10, 11, 15, 16, 17],
+      "hours_reserved": [12, 13, 14]
+    }
+  ]
+}
+```
+
+</details>
+
+## Comandos útiles para desarrollo
+
+### Shells de contenedores
+```bash
+# Acceder al contenedor PHP
+docker compose exec -it club_cms_php sh
+```
+```bash
+# Acceder a MySQL
+docker compose exec -it club_cms_database mysql -u root -p
+```
+
+### Comandos Artisan
+```bash
+# Limpiar rutas
+docker compose exec -it club_cms_php php artisan route:clear
+```
+```bash
+# Listar rutas
+docker compose exec -it club_cms_php php artisan route:list
+```
+```bash
+# Refrescar base de datos con seeders
+docker compose exec -it club_cms_php php artisan migrate:fresh --seed
+```
+
+### Parar y limpiar
+```bash
+# Detener contenedores
+docker-compose down
+```
+```bash
+# Detener y eliminar volúmenes
+docker-compose down -v
+```
+
+## Documentación y herramientas
+
+### Documentación de la API
+- **Swagger UI:** http://localhost/api/documentation
+- **Especificación OpenAPI:** `storage/api-docs/api-docs.json`
+
+### Herramientas de prueba
+- **Colección Postman:** `ClubCMS.postman_collection.json`
+- **Esquema ER:** `er-diagram.pdf`
+
+### Datos de prueba incluidos
+El sistema incluye seeders con datos de ejemplo:
+- Usuario admin: `admin@admin.com` / `admin`
+- Deportes: Tenis, Pádel, Fútbol, Baloncesto
+- Pistas de ejemplo para cada deporte
+- Socios de prueba
+- Reservas de ejemplo
+
+## Autenticación y autorización
+
+### Tipos de usuario
+- **Admin:** Acceso completo a todas las funcionalidades
+- **User:** Acceso al CRUD de miembros, reservas, obtener pistas y deportes.
+
+### Endpoints protegidos
+- Todos los endpoints requieren autenticación excepto `/auth/login` y `/auth/register`
+- Endpoints de creación/edición/eliminación requieren rol `admin`
+- Las reservas pueden ser creadas por cualquier usuario autenticado
+
+## Arquitectura técnica
+
+### Stack tecnológico
+- **Backend:** Laravel 12.x con PHP 8.2
+- **Base de datos:** MySQL 8.1
+- **Autenticación:** Laravel Passport (OAuth2)
+- **Contenedores:** Docker + Docker Compose
+- **Servidor web:** Caddy
+- **Documentación:** Swagger/OpenAPI
+
+### Estructura del proyecto
+```
+├── Caddyfile                    # Configuración Caddy
+├── dockerfile                  # Imagen Docker de la aplicación
+├── docker-compose.yml          # Orquestación de servicios
+└── club_cms/                   # Aplicación Laravel
+    ├── app/
+    │   ├── Http/Controllers/    # Controladores de la API
+    │   ├── Models/             # Modelos Eloquent
+    │   └── OpenApi/            # Anotaciones Swagger
+    ├── database/
+    │   ├── migrations/         # Migraciones de BD
+    │   └── seeders/           # Datos de prueba
+    ├── routes/api.php         # Rutas de la API
+    └── storage/api-docs/      # Documentación generada
+```
+
+## Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit tus cambios (`git commit -am 'Añadir nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Abre un Pull Request
+
+## Contacto
+
+- **GitHub:** [CleanMatyx](https://github.com/CleanMatyx)
+- **Email:** [mtsbrr07@gmail.com](mailto:mtsbrr07@gmail.com)
+
+---
+
+¡Gracias por usar **Club CMS**! 🎾⚽🏀
