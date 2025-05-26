@@ -7,14 +7,17 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Info(
  *  version="1.0.0",
- *  title="Club CMS API",
- *  description="Documentación de la API para el Club CMS",
- *  @OA\Contact(email="soporte@clubcms.com")
+ *  title="Club CMS API v1",
+ *  description="Documentación de la API v1 para el Club CMS",
+ *  @OA\Contact(
+ *      name="Equipo de Desarrollo Club CMS",
+ *      email="mtsbrr07@gmail.com"
+ *  )
  * )
  *
  * @OA\Server(
- *  url="http://localhost/api",
- *  description="Base URL para todos los endpoints"
+ *  url="http://localhost/api/v1",
+ *  description="Base URL para todos los endpoints de la API v1"
  * )
  * 
  * @OA\SecurityScheme(
