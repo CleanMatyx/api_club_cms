@@ -1,17 +1,18 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Club CMS API",
-        "description": "Documentación de la API para el Club CMS",
+        "title": "Club CMS API v1",
+        "description": "Documentación de la API v1 para el Club CMS",
         "contact": {
-            "email": "soporte@clubcms.com"
+            "name": "Equipo de Desarrollo Club CMS",
+            "email": "mtsbrr07@gmail.com"
         },
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "http://localhost/api",
-            "description": "Base URL para todos los endpoints"
+            "url": "http://localhost/api/v1",
+            "description": "Base URL para todos los endpoints de la API v1"
         }
     ],
     "paths": {
@@ -22,7 +23,7 @@
                 ],
                 "summary": "Iniciar sesión",
                 "description": "Autentica un usuario en el sistema utilizando email y contraseña.",
-                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "operationId": "7c0d984f3d009d07b4d7759429b1df11",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -74,7 +75,7 @@
                 ],
                 "summary": "Cerrar sesión",
                 "description": "Cierra la sesión del usuario autenticado invalidando su token. Accesible para usuarios y administradores autenticados.",
-                "operationId": "6abf3b64a4bc7838d56346f05a5153af",
+                "operationId": "8f22b4b1d4d13235593868f409cf2395",
                 "responses": {
                     "200": {
                         "description": "Logout exitoso",
@@ -121,7 +122,7 @@
                 ],
                 "summary": "Registrar un nuevo usuario del sistema",
                 "description": "Registra un nuevo usuario del sistema (empleado/administrador) para acceso al CMS. Los socios se gestionan por separado.",
-                "operationId": "08136088c4862c313b35d6518bab8d3a",
+                "operationId": "460b8091c3f2976ca951cacd50b7c203",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -186,7 +187,7 @@
                 ],
                 "summary": "Listar pistas",
                 "description": "Obtiene una lista paginada de todas las pistas. Accesible para usuarios y administradores autenticados.",
-                "operationId": "ad22a0ec751368d8d53832f3c2b95fec",
+                "operationId": "c276f57f7800ccb241beab60281a8e97",
                 "responses": {
                     "200": {
                         "description": "Listado de pistas",
@@ -265,7 +266,7 @@
                 ],
                 "summary": "Crear una nueva pista (Solo Admins)",
                 "description": "Crea una nueva pista en el sistema. Requiere rol de administrador.",
-                "operationId": "e46ace1324601645d011660e140c8cd8",
+                "operationId": "b99714e09c8bc736eb6e286f09b69c88",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -355,7 +356,7 @@
                 ],
                 "summary": "Mostrar detalles de una pista",
                 "description": "Obtiene los detalles de una pista específica. Accesible para usuarios y administradores autenticados.",
-                "operationId": "4c5ff29409abcb4a3093b93c08125600",
+                "operationId": "b24f7c9a30e8b5d082006a1b7ab97f02",
                 "parameters": [
                     {
                         "name": "id",
@@ -431,7 +432,7 @@
                 ],
                 "summary": "Actualizar una pista existente (Solo Admins)",
                 "description": "Actualiza los datos de una pista existente. Requiere rol de administrador.",
-                "operationId": "2bf735bf6f7c1eb582654d1f9c0b9ea6",
+                "operationId": "89da6aab038c28f41ed3850e6b4b1bdd",
                 "parameters": [
                     {
                         "name": "id",
@@ -531,7 +532,7 @@
                 ],
                 "summary": "Eliminar una pista (Solo Admins)",
                 "description": "Elimina una pista del sistema. Requiere rol de administrador.",
-                "operationId": "be65d92a118597cab52d3f23304f8b8b",
+                "operationId": "058ea82df7c55f22f18a6d8ee31e22da",
                 "parameters": [
                     {
                         "name": "id",
@@ -600,7 +601,7 @@
                 ],
                 "summary": "Buscar disponibilidad de pistas y horas para un deporte, un socio y una fecha",
                 "description": "Busca la disponibilidad de pistas para un deporte específico en una fecha determinada. Accesible para usuarios y administradores autenticados.",
-                "operationId": "8036aa4d88fd8b670b5755ee85366355",
+                "operationId": "ab8cc5d97d302c9662aa911c874e55c8",
                 "parameters": [
                     {
                         "name": "sport_name",
@@ -799,7 +800,7 @@
                 ],
                 "summary": "Listar miembros",
                 "description": "Obtiene una lista paginada de todos los miembros. Accesible para usuarios y administradores autenticados.",
-                "operationId": "ffff12fc87590aad06f6e8282bd0831c",
+                "operationId": "72a8d49a60095d6412b7883f05241f5e",
                 "responses": {
                     "200": {
                         "description": "Listado de miembros",
@@ -878,7 +879,7 @@
                 ],
                 "summary": "Crear un nuevo miembro (Solo Admins)",
                 "description": "Crea un nuevo miembro en el sistema. Requiere rol de administrador.",
-                "operationId": "3ba7591543d7d445e19be1c7fef65e9a",
+                "operationId": "8e8a213a8b178d08da97cfeee1128b2e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -955,7 +956,7 @@
                 ],
                 "summary": "Mostrar detalles de un miembro",
                 "description": "Obtiene los detalles de un miembro específico. Accesible para usuarios y administradores autenticados.",
-                "operationId": "1ec8ec404243666a7250dfdbc904733c",
+                "operationId": "519cd50621e42c731bf85d0a067544b0",
                 "parameters": [
                     {
                         "name": "id",
@@ -1031,7 +1032,7 @@
                 ],
                 "summary": "Actualizar un miembro existente (Solo Admins)",
                 "description": "Actualiza los datos de un miembro existente. Requiere rol de administrador.",
-                "operationId": "b3343b4b4e177d072994080a4e19d263",
+                "operationId": "1ee8b107bb45794f64110c0a4bdb0f92",
                 "parameters": [
                     {
                         "name": "id",
@@ -1118,7 +1119,7 @@
                 ],
                 "summary": "Eliminar un miembro (Solo Admins)",
                 "description": "Elimina un miembro del sistema. Requiere rol de administrador.",
-                "operationId": "60ccb06330d81e74342a654c4683369d",
+                "operationId": "3b44e49e5729a880259226d11aeebf81",
                 "parameters": [
                     {
                         "name": "id",
@@ -1197,7 +1198,7 @@
                 ],
                 "summary": "Listar reservas",
                 "description": "Obtiene una lista paginada de todas las reservas. Accesible para usuarios y administradores autenticados.",
-                "operationId": "c0ead7ee8da750a341eeff509f3af8b9",
+                "operationId": "f0086b95a7886230df603bd0841965f5",
                 "responses": {
                     "200": {
                         "description": "Listado de reservas",
@@ -1276,7 +1277,7 @@
                 ],
                 "summary": "Crear una nueva reserva",
                 "description": "Crea una nueva reserva en el sistema. Valida límites de reservas (máximo 3 por día) y previene duplicados.",
-                "operationId": "ab4d7952bb3ef1ccd7724e8d862b034b",
+                "operationId": "06632cb9cfd97e21b2d137f5068826fb",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1353,7 +1354,7 @@
                 ],
                 "summary": "Mostrar detalles de una reserva",
                 "description": "Obtiene los detalles de una reserva específica. Accesible para usuarios y administradores autenticados.",
-                "operationId": "49499ada3f4d3680e147782d33573252",
+                "operationId": "9e2e49eba00f4d7f664c4d26a46e8e31",
                 "parameters": [
                     {
                         "name": "id",
@@ -1429,7 +1430,7 @@
                 ],
                 "summary": "Actualizar una reserva existente",
                 "description": "Actualiza los datos de una reserva existente. Valida límites de reservas y previene duplicados.",
-                "operationId": "4a219e5cfd9760d12da084929201d042",
+                "operationId": "c09d845d5157a1b72453b8410e7c142d",
                 "parameters": [
                     {
                         "name": "id",
@@ -1516,7 +1517,7 @@
                 ],
                 "summary": "Eliminar una reserva",
                 "description": "Elimina una reserva del sistema. Accesible para usuarios y administradores autenticados.",
-                "operationId": "b97e0df7036fa97413d6b819cf61a11e",
+                "operationId": "ba1b55393f74df65da4be0962a5872ea",
                 "parameters": [
                     {
                         "name": "id",
@@ -1585,7 +1586,7 @@
                 ],
                 "summary": "Listar deportes",
                 "description": "Obtiene una lista paginada de todos los deportes. Accesible para usuarios y administradores autenticados.",
-                "operationId": "8171a98b44afe5a0817781eed04221fb",
+                "operationId": "99924129c0a5de1681a1749f1b18297c",
                 "responses": {
                     "200": {
                         "description": "Listado de deportes",
@@ -1664,7 +1665,7 @@
                 ],
                 "summary": "Crear un nuevo deporte (Solo Admins)",
                 "description": "Crea un nuevo deporte en el sistema. Requiere rol de administrador.",
-                "operationId": "985d0ccb04225afb2d090fb71cb7d059",
+                "operationId": "8ab240e908b50cf38d9c68166f9423ea",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1750,7 +1751,7 @@
                 ],
                 "summary": "Mostrar detalles de un deporte",
                 "description": "Obtiene los detalles de un deporte específico. Accesible para usuarios y administradores autenticados.",
-                "operationId": "b8a8723a0a73b793da9a97c2e538f64f",
+                "operationId": "f75398d4790bca84baf7c920c98d5051",
                 "parameters": [
                     {
                         "name": "id",
@@ -1826,7 +1827,7 @@
                 ],
                 "summary": "Actualizar un deporte existente (Solo Admins)",
                 "description": "Actualiza los datos de un deporte existente. Requiere rol de administrador.",
-                "operationId": "08935a01fafba8708378e15d0441038a",
+                "operationId": "5cf39ffcbfe7032579bc651d6c3adf5a",
                 "parameters": [
                     {
                         "name": "id",
@@ -1922,7 +1923,7 @@
                 ],
                 "summary": "Eliminar un deporte (Solo Admins)",
                 "description": "Elimina un deporte del sistema. Requiere rol de administrador.",
-                "operationId": "390abb277eb6fb39983e919bb33015cc",
+                "operationId": "5e77237195c4e0404e33443d408dd98e",
                 "parameters": [
                     {
                         "name": "id",
@@ -1991,7 +1992,7 @@
                 ],
                 "summary": "Listar usuarios (Solo Admins)",
                 "description": "Obtiene una lista paginada de todos los usuarios. Requiere rol de administrador.",
-                "operationId": "7208c29037df2b8bb02499ba39ed8a78",
+                "operationId": "ae84e3058965f3a0790d29d82fe29b11",
                 "responses": {
                     "200": {
                         "description": "Listado de usuarios",
@@ -2070,7 +2071,7 @@
                 ],
                 "summary": "Crear un nuevo usuario (Solo Admins)",
                 "description": "Crea un nuevo usuario en el sistema. Requiere rol de administrador.",
-                "operationId": "262eb5ca1fdea354023c0a8870442c1e",
+                "operationId": "0e996f660839633eaa5e5d5ae2a42574",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2160,7 +2161,7 @@
                 ],
                 "summary": "Mostrar detalles de un usuario (Solo Admins)",
                 "description": "Obtiene los detalles de un usuario específico. Requiere rol de administrador.",
-                "operationId": "6946bbab7898f59a09e3c8e529a38907",
+                "operationId": "c9746b642010d34902b7ec236065193b",
                 "parameters": [
                     {
                         "name": "id",
@@ -2236,7 +2237,7 @@
                 ],
                 "summary": "Actualizar un usuario existente (Solo Admins)",
                 "description": "Actualiza los datos de un usuario existente. Requiere rol de administrador.",
-                "operationId": "05028d02ea3e9a99abd6260cfe05b179",
+                "operationId": "fe4f0cb40e1d8afd31b6f46936c2288a",
                 "parameters": [
                     {
                         "name": "id",
@@ -2336,7 +2337,7 @@
                 ],
                 "summary": "Eliminar un usuario (Solo Admins)",
                 "description": "Elimina un usuario del sistema. Requiere rol de administrador.",
-                "operationId": "b3d28da5dc9de7fc1bd425f93b54ff7b",
+                "operationId": "26d4a5e2abbc500525e2a6576613662b",
                 "parameters": [
                     {
                         "name": "id",
