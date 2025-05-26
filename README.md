@@ -113,7 +113,7 @@ cd club_cms</code></pre>
     </li>
     <li>
       <strong>Arranca los contenedores:</strong>
-      <pre><code>docker-compose up -d</code></pre>
+      <pre><code>docker compose up -d</code></pre>
       <p>Servicios levantados:</p>
       <ul>
         <li><code>club_cms_webserver</code> (Caddy puertos 80/443)</li>
@@ -156,10 +156,10 @@ cd club_cms</code></pre>
   <h3>Shells de contenedores</h3>
   <ul>
     <li>PHP:
-      <pre><code>docker-compose exec -it club_cms_php sh</code></pre>
+      <pre><code>docker compose exec -it club_cms_php sh</code></pre>
     </li>
     <li>MySQL:
-      <pre><code>docker-compose exec -it club_cms_database mysql -u root -p</code></pre>
+      <pre><code>docker compose exec -it club_cms_database mysql -u root -p</code></pre>
     </li>
   </ul>
   <h3>Comandos útiles de Artisan</h3>

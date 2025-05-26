@@ -576,6 +576,16 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Pista no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al eliminar la pista",
                         "content": {
@@ -877,8 +887,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Crear un nuevo miembro (Solo Admins)",
-                "description": "Crea un nuevo miembro en el sistema. Requiere rol de administrador.",
+                "summary": "Crear un nuevo miembro",
+                "description": "Crea un nuevo miembro en el sistema. Accesible para usuarios y administradores autenticados.",
                 "operationId": "8e8a213a8b178d08da97cfeee1128b2e",
                 "requestBody": {
                     "required": true,
@@ -1030,8 +1040,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Actualizar un miembro existente (Solo Admins)",
-                "description": "Actualiza los datos de un miembro existente. Requiere rol de administrador.",
+                "summary": "Actualizar un miembro existente",
+                "description": "Actualiza los datos de un miembro existente. Accesible para usuarios y administradores autenticados.",
                 "operationId": "1ee8b107bb45794f64110c0a4bdb0f92",
                 "parameters": [
                     {
@@ -1117,8 +1127,8 @@
                 "tags": [
                     "Members"
                 ],
-                "summary": "Eliminar un miembro (Solo Admins)",
-                "description": "Elimina un miembro del sistema. Requiere rol de administrador.",
+                "summary": "Eliminar un miembro",
+                "description": "Elimina un miembro del sistema. Accesible para usuarios y administradores autenticados.",
                 "operationId": "3b44e49e5729a880259226d11aeebf81",
                 "parameters": [
                     {
@@ -1561,6 +1571,16 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Reserva no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Error al eliminar la reserva",
                         "content": {
@@ -1959,6 +1979,16 @@
                     },
                     "401": {
                         "description": "No autorizado - Token inválido o faltante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Deporte no encontrado",
                         "content": {
                             "application/json": {
                                 "schema": {

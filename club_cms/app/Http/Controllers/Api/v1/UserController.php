@@ -340,11 +340,6 @@ class UserController extends Controller
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
-     *     response=404,
-     *     description="Usuario no encontrado",
-     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *   ),
-     *   @OA\Response(
      *     response=500,
      *     description="Error al eliminar el usuario",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")

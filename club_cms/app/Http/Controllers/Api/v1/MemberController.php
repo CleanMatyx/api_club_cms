@@ -95,8 +95,8 @@ class MemberController extends Controller
     /**
      * @OA\Post(
      *  path="/members",
-     *  summary="Crear un nuevo miembro (Solo Admins)",
-     *  description="Crea un nuevo miembro en el sistema. Requiere rol de administrador.",
+     *  summary="Crear un nuevo miembro",
+     *  description="Crea un nuevo miembro en el sistema. Accesible para usuarios y administradores autenticados.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
@@ -231,8 +231,8 @@ class MemberController extends Controller
     /**
      * @OA\Put(
      *  path="/members/{id}",
-     *  summary="Actualizar un miembro existente (Solo Admins)",
-     *  description="Actualiza los datos de un miembro existente. Requiere rol de administrador.",
+     *  summary="Actualizar un miembro existente",
+     *  description="Actualiza los datos de un miembro existente. Accesible para usuarios y administradores autenticados.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
@@ -306,8 +306,8 @@ class MemberController extends Controller
     /**
      * @OA\Delete(
      *  path="/members/{id}",
-     *  summary="Eliminar un miembro (Solo Admins)",
-     *  description="Elimina un miembro del sistema. Requiere rol de administrador.",
+     *  summary="Eliminar un miembro",
+     *  description="Elimina un miembro del sistema. Accesible para usuarios y administradores autenticados.",
      *  tags={"Members"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(

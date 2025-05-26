@@ -14,13 +14,13 @@ Route::prefix('v1')->group(function() {
 
     Route::middleware(['auth:api', 'role:admin'])->group(function() {
         Route::apiResource('/users', UserController::class);
-        Route::apiResource('/members', MemberController::class);
         Route::apiResource('/courts', CourtController::class)->except(['index', 'show']);
         Route::apiResource('/sports', SportController::class)->except(['index', 'show']);
     });
 
     Route::middleware(['auth:api', 'role:admin,user'])->group(function() {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::apiResource('/members', MemberController::class);
         Route::get('/courts', [CourtController::class, 'index']);
         Route::get('/courts/{id}', [CourtController::class, 'show']);
         Route::post('/courts/search', [CourtController::class, 'search']);
