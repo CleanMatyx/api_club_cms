@@ -332,6 +332,11 @@ class CourtController extends Controller
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
+     *   response=404,
+     *   description="Pista no encontrada",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *  ),
+     *  @OA\Response(
      *   response=500,
      *   description="Error al eliminar la pista",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -343,21 +348,21 @@ class CourtController extends Controller
         try {
             $court = Court::findOrFail($id);
             $court->delete();
-            if ($court) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Pista eliminada correctamente'
-                ], 200);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al eliminar la pista'
-                ], 500);
-            }
+            
+            return response()->json([
+                'ok' => true,
+                'message' => 'Pista eliminada correctamente'
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Pista no encontrada'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error interno del servidor al eliminar la cancha.'
+                'message' => 'Error interno del servidor al eliminar la pista.'
             ], 500);
         }
     }

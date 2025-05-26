@@ -41,12 +41,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/auth/login",
+							"raw": "{{URL}}/api/v1/auth/login",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"auth",
 								"login"
 							]
@@ -60,12 +61,13 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/auth/logout",
+							"raw": "{{URL}}/api/v1/auth/logout",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"auth",
 								"logout"
 							]
@@ -84,12 +86,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/courts",
+							"raw": "{{URL}}/api/v1/courts",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"courts"
 							]
 						}
@@ -102,14 +105,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/courts/20",
+							"raw": "{{URL}}/api/v1/courts/1",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"courts",
-								"20"
+								"1"
 							]
 						}
 					},
@@ -130,12 +134,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/courts",
+							"raw": "{{URL}}/api/v1/courts",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"courts"
 							]
 						}
@@ -176,12 +181,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/courts/20",
+							"raw": "{{URL}}/api/v1/courts/20",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"courts",
 								"20"
 							]
@@ -196,7 +202,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"sport_name\": \"Fútbol\",\n  \"date\": \"10/05/2025\",\n  \"member_id\": 2\n}",
+							"raw": "{\n    \"sport_name\": \"Tenis\",\n    \"date\": \"10/05/2025\",\n    \"member_id\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -204,12 +210,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/courts/search",
+							"raw": "{{URL}}/api/v1/courts/search",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"courts",
 								"search"
 							]
@@ -228,12 +235,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/members",
+							"raw": "{{URL}}/api/v1/members",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"members"
 							]
 						}
@@ -246,14 +254,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/members/35",
+							"raw": "{{URL}}/api/v1/members/30",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"members",
-								"35"
+								"30"
 							]
 						}
 					},
@@ -266,7 +275,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\" : \"6\",\n    \"membership_date\" : \"2020-06-17\",\n    \"status\" : \"active\"\n}",
+							"raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@email.com\",\n  \"phone\": \"+34 123 456 789\",\n  \"membership_date\": \"2023-01-01\",\n  \"status\": \"active\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -274,12 +283,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/members",
+							"raw": "{{URL}}/api/v1/members",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"members"
 							]
 						}
@@ -293,7 +303,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\" : \"6\",\n    \"membership_date\" : \"2020-06-17\",\n    \"status\" : \"incative\"\n}",
+							"raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@email.com\",\n  \"phone\": \"+34 123 456 789\",\n  \"membership_date\": \"2023-01-01\",\n  \"status\": \"active\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -301,14 +311,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/members/36",
+							"raw": "{{URL}}/api/v1/members/3",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"members",
-								"36"
+								"3"
 							]
 						}
 					},
@@ -320,12 +331,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/members/36",
+							"raw": "{{URL}}/api/v1/members/36",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"members",
 								"36"
 							]
@@ -344,12 +356,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/reservations",
+							"raw": "{{URL}}/api/v1/reservations",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"reservations"
 							]
 						}
@@ -362,12 +375,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/reservations/2",
+							"raw": "{{URL}}/api/v1/reservations/2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"reservations",
 								"2"
 							]
@@ -382,7 +396,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"4\",\n    \"date\" : \"2025-05-21\",\n    \"hour\" : \"19:00\"\n}",
+							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"4\",\n    \"date\" : \"2026-05-21\",\n    \"hour\" : \"19:00\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -390,12 +404,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/reservations",
+							"raw": "{{URL}}/api/v1/reservations",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"reservations"
 							]
 						}
@@ -409,7 +424,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"5\",\n    \"date\" : \"2025-05-21\",\n    \"hour\" : \"20:00\"\n}",
+							"raw": "{\n    \"member_id\" : \"2\",\n    \"court_id\" : \"5\",\n    \"date\" : \"2026-05-21\",\n    \"hour\" : \"20:00\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -417,14 +432,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/reservations/281",
+							"raw": "{{URL}}/api/v1/reservations/2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"reservations",
-								"281"
+								"2"
 							]
 						}
 					},
@@ -436,14 +452,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/reservations/281",
+							"raw": "{{URL}}/api/v1/reservations/28",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"reservations",
-								"281"
+								"28"
 							]
 						}
 					},
@@ -460,12 +477,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/sports",
+							"raw": "{{URL}}/api/v1/sports",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"sports"
 							]
 						}
@@ -478,14 +496,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/sports/10",
+							"raw": "{{URL}}/api/v1/sports/1",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"sports",
-								"10"
+								"1"
 							]
 						}
 					},
@@ -506,12 +525,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/sports/",
+							"raw": "{{URL}}/api/v1/sports/",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"sports",
 								""
 							]
@@ -534,14 +554,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/sports/10",
+							"raw": "{{URL}}/api/v1/sports/6",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"sports",
-								"10"
+								"6"
 							]
 						}
 					},
@@ -553,14 +574,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/sports/10",
+							"raw": "{{URL}}/api/v1/sports/5",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"sports",
-								"10"
+								"5"
 							]
 						}
 					},
@@ -577,12 +599,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/users",
+							"raw": "{{URL}}/api/v1/users",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"users"
 							]
 						}
@@ -595,12 +618,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/users/2",
+							"raw": "{{URL}}/api/v1/users/2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"users",
 								"2"
 							]
@@ -623,12 +647,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/users",
+							"raw": "{{URL}}/api/v1/users",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"users"
 							]
 						}
@@ -650,14 +675,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/api/users/4",
+							"raw": "{{URL}}/api/v1/users/2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"users",
-								"4"
+								"2"
 							]
 						}
 					},
@@ -669,40 +695,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/users/3",
+							"raw": "{{URL}}/api/v1/users/2",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"users",
-								"3"
+								"2"
 							]
 						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://swagger.local/api/users",
-					"protocol": "http",
-					"host": [
-						"swagger",
-						"local"
-					],
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {

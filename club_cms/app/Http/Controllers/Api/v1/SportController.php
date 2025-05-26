@@ -321,6 +321,11 @@ class SportController extends Controller
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
+     *     response=404,
+     *     description="Deporte no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
      *     response=500,
      *     description="Error al eliminar el deporte",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -332,17 +337,17 @@ class SportController extends Controller
         try {
             $sport = Sport::findOrFail($id);
             $sport->delete();
-            if($sport) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Deporte eliminado correctamente'
-                ], 200);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al eliminar el deporte'
-                ], 500);
-            }
+            
+            return response()->json([
+                'ok' => true,
+                'message' => 'Deporte eliminado correctamente'
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Deporte no encontrado'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,

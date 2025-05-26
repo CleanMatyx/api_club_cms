@@ -338,6 +338,11 @@ class ReservationController extends Controller
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
+     *     response=404,
+     *     description="Reserva no encontrada",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
      *     response=500,
      *     description="Error al eliminar la reserva",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -349,17 +354,17 @@ class ReservationController extends Controller
         try {
             $reservation = Reservation::findOrFail($id);
             $reservation->delete();
-            if($reservation) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Reserva eliminada correctamente'
-                ], 200);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al eliminar la reserva'
-                ], 500);
-            }
+            
+            return response()->json([
+                'ok' => true,
+                'message' => 'Reserva eliminada correctamente'
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Reserva no encontrada'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,

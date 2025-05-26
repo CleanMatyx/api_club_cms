@@ -340,6 +340,11 @@ class UserController extends Controller
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
+     *     response=404,
+     *     description="Usuario no encontrado",
+     *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   ),
+     *   @OA\Response(
      *     response=500,
      *     description="Error al eliminar el usuario",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -351,17 +356,17 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
             $user->delete();
-            if ($user) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Usuario eliminado correctamente'
-                ], 200);
-            } else {
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Error al eliminar el usuario'
-                ], 500);
-            }
+            
+            return response()->json([
+                'ok' => true,
+                'message' => 'Usuario eliminado correctamente'
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Usuario no encontrado'
+            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
