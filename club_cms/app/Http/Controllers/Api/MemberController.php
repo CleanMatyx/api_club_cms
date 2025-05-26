@@ -79,8 +79,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener los miembros debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener los miembros.'
             ], 500);
         }
     }
@@ -155,8 +154,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear el miembro.'
             ], 500);
         }
     }
@@ -217,8 +215,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener el miembro.'
             ], 500);
         }
     }
@@ -301,8 +298,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar el miembro.'
             ], 500);
         }
     }
@@ -364,8 +360,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar el miembro.'
             ], 500);
         }
     }

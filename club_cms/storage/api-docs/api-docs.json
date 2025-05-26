@@ -2812,18 +2812,16 @@
                 "type": "object"
             },
             "ErrorResponse": {
+                "description": "Respuesta estándar para errores internos del servidor",
                 "properties": {
                     "ok": {
                         "type": "boolean",
                         "example": false
                     },
                     "message": {
+                        "description": "Mensaje de error seguro que no expone detalles técnicos",
                         "type": "string",
-                        "example": "Detalle del error"
-                    },
-                    "error": {
-                        "type": "string",
-                        "example": "Mensaje de error detallado"
+                        "example": "Error interno del servidor al procesar la solicitud."
                     }
                 },
                 "type": "object"
@@ -2831,6 +2829,11 @@
             "ValidationErrorResponse": {
                 "description": "Respuesta cuando falla la validación de los datos de la petición",
                 "properties": {
+                    "ok": {
+                        "description": "Indica que la operación falló",
+                        "type": "boolean",
+                        "example": false
+                    },
                     "message": {
                         "description": "Mensaje de error general",
                         "type": "string",
@@ -2851,6 +2854,12 @@
                             ],
                             "date": [
                                 "La fecha no puede ser anterior a hoy."
+                            ],
+                            "hour": [
+                                "El horario debe estar entre las 08:00 y las 21:00."
+                            ],
+                            "name": [
+                                "El campo nombre es obligatorio."
                             ]
                         }
                     }

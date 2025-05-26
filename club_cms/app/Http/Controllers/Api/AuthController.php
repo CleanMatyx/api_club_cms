@@ -67,14 +67,16 @@ class AuthController extends Controller
             ], 401);
         
         } catch (Exception $e) {
-            $errorMsg = $e->getMessage();
-            if (strpos($errorMsg, "Personal access client not found") !== false) {
-                $errorMsg .= " Ejecuta: php artisan passport:client --personal";
+            if (strpos($e->getMessage(), "Personal access client not found") !== false) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Error de configuración del servidor. Contacte al administrador.',
+                ], 500);
             }
+            
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al iniciar sesión por error inesperado',
-                'error' => $errorMsg
+                'message' => 'Error interno del servidor durante el inicio de sesión.'
             ], 500);
         }
     }
@@ -114,8 +116,7 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al cerrar sesión por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor durante el cierre de sesión.'
             ], 500);
         }
     }
@@ -181,8 +182,7 @@ class AuthController extends Controller
     } catch (Exception $e) {
         return response()->json([
             'ok' => false,
-            'message' => 'Error al registrar usuario por error inesperado',
-            'error' => $e->getMessage()
+            'message' => 'Error interno del servidor durante el registro de usuario.'
         ], 500);
     }
 }

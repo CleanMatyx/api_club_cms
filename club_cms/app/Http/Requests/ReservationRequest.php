@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 use App\Models\Member;
+use App\Models\Reservation;
 use Carbon\Carbon;
 
 class ReservationRequest extends FormRequest
@@ -51,42 +52,58 @@ class ReservationRequest extends FormRequest
             return;
         }
 
+        $reservationDate = Carbon::parse($this->date);
+        
+        if ($reservationDate->isPast()) {
+            return;
+        }
+
+        $hour = Carbon::createFromFormat('H:i', $this->hour);
+        $businessStart = Carbon::createFromFormat('H:i', '08:00');
+        $businessEnd = Carbon::createFromFormat('H:i', '21:00');
+        
+        if ($hour->lt($businessStart) || $hour->gt($businessEnd)) {
+            $validator->errors()->add(
+                'hour', 
+                'Las reservas solo están permitidas entre las 08:00 y las 21:00.'
+            );
+            return;
+        }
+
         $member = Member::find($this->member_id);
         if (!$member) {
             return;
         }
 
-        $reservationDate = Carbon::parse($this->date);
+        $reservationId = $this->route('reservation');
 
-        if (!$member->checkMaxReservations($reservationDate)) {
+        $existingReservationsCount = $member->reservations()
+            ->whereDate('date', $reservationDate)
+            ->when($reservationId, function ($query) use ($reservationId) {
+                return $query->where('id', '!=', $reservationId);
+            })
+            ->count();
+
+        if ($existingReservationsCount >= 3) {
             $validator->errors()->add(
                 'member_id', 
                 'El miembro ya tiene el máximo de 3 reservas permitidas para esta fecha.'
             );
         }
 
-        if (!$member->checkReservationsSameDate($this->court_id, $reservationDate, $this->hour)) {
-            $isUpdate = $this->route('reservation');
-            
-            if ($isUpdate) {
-                $existingReservation = $member->reservations()
-                    ->where('court_id', $this->court_id)
-                    ->whereDate('date', $reservationDate)
-                    ->whereTime('hour', $this->hour)
-                    ->first();
-                
-                if ($existingReservation && $existingReservation->id != $this->route('reservation')->id) {
-                    $validator->errors()->add(
-                        'court_id', 
-                        'Ya existe una reserva para esta cancha en la misma fecha y hora.'
-                    );
-                }
-            } else {
-                $validator->errors()->add(
-                    'court_id', 
-                    'Ya existe una reserva para esta cancha en la misma fecha y hora.'
-                );
-            }
+        $courtOccupied = Reservation::where('court_id', $this->court_id)
+            ->whereDate('date', $reservationDate)
+            ->whereTime('hour', $this->hour)
+            ->when($reservationId, function ($query) use ($reservationId) {
+                return $query->where('id', '!=', $reservationId);
+            })
+            ->first();
+
+        if ($courtOccupied) {
+            $validator->errors()->add(
+                'court_id', 
+                'La cancha ya está ocupada en esta fecha y hora.'
+            );
         }
     }
 

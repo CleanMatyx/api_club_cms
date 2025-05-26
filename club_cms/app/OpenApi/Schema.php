@@ -225,9 +225,14 @@ class Schema
      * @OA\Schema(
      *   schema="ErrorResponse",
      *   type="object",
+     *   description="Respuesta estándar para errores internos del servidor",
      *   @OA\Property(property="ok", type="boolean", example=false),
-     *   @OA\Property(property="message",type="string", example="Detalle del error"),
-     *   @OA\Property(property="error", type="string", example="Mensaje de error detallado")
+     *   @OA\Property(
+     *     property="message",
+     *     type="string", 
+     *     example="Error interno del servidor al procesar la solicitud.",
+     *     description="Mensaje de error seguro que no expone detalles técnicos"
+     *   )
      * )
      */
     private $errorResponse;
@@ -237,6 +242,12 @@ class Schema
      *   schema="ValidationErrorResponse",
      *   type="object",
      *   description="Respuesta cuando falla la validación de los datos de la petición",
+     *   @OA\Property(
+     *     property="ok",
+     *     type="boolean",
+     *     example=false,
+     *     description="Indica que la operación falló"
+     *   ),
      *   @OA\Property(
      *     property="message",
      *     type="string",
@@ -251,7 +262,9 @@ class Schema
      *       "email": {"El correo electrónico ya está registrado por otro miembro."},
      *       "member_id": {"El miembro ya tiene el máximo de 3 reservas permitidas para esta fecha."},
      *       "court_id": {"Ya existe una reserva para esta cancha en la misma fecha y hora."},
-     *       "date": {"La fecha no puede ser anterior a hoy."}
+     *       "date": {"La fecha no puede ser anterior a hoy."},
+     *       "hour": {"El horario debe estar entre las 08:00 y las 21:00."},
+     *       "name": {"El campo nombre es obligatorio."}
      *     }
      *   )
      * )

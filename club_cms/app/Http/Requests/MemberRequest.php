@@ -21,7 +21,7 @@ class MemberRequest extends FormRequest
      */
     public function rules(): array
     {
-        $memberId = $this->route('id'); // Para obtener el ID en caso de PUT
+        $memberId = $this->route('id');
         
         $rules = [
             'name' => 'required|string|max:255',
@@ -30,15 +30,11 @@ class MemberRequest extends FormRequest
             'status' => 'required|string|in:active,inactive,suspended',
         ];
 
-        // Validación de email con unique
         if ($this->isMethod('post')) {
-            // Para POST (crear): el email debe ser único en toda la tabla
             $rules['email'] = 'nullable|email|max:255|unique:members,email';
         } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
-            // Para PUT/PATCH (actualizar): el email debe ser único excepto para el miembro actual
             $rules['email'] = "nullable|email|max:255|unique:members,email,{$memberId}";
         } else {
-            // Para otros métodos, validación básica
             $rules['email'] = 'nullable|email|max:255';
         }
 

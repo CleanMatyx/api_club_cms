@@ -80,8 +80,7 @@ class ReservationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener las reservas debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener las reservas.'
             ], 500);
         }
     }
@@ -148,20 +147,18 @@ class ReservationController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la reserva',
-                'error' => $e->getMessage()
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
             ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Recurso relacionado no encontrado',
-                'error' => $e->getMessage()
+                'message' => 'Recurso relacionado no encontrado'
             ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear la reserva.'
             ], 500);
         }
     }
@@ -223,8 +220,7 @@ class ReservationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener la reserva.'
             ], 500);
         }
     }
@@ -297,8 +293,8 @@ class ReservationController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar la reserva',
-                'error' => $e->getMessage()
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
             ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -308,8 +304,7 @@ class ReservationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar la reserva.'
             ], 500);
         }
     }
@@ -368,8 +363,7 @@ class ReservationController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar la reserva.'
             ], 500);
         }
     }

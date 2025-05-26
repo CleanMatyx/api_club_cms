@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Sport;
 use App\Http\Resources\SportResource;
 use App\Http\Requests\SportRequest;
-use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -79,8 +78,7 @@ class SportController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener los deportes debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener los deportes.'
             ], 500);
         }
     }
@@ -138,32 +136,16 @@ class SportController extends Controller
     public function store(SportRequest $request)
     {
         try {
-            $request->validated();
-            $sport = Sport::create($request->all());
+            $sport = Sport::create($request->validated());
 
-            if($sport) {
-                return response()->json([
-                    'ok' => true,
-                    'sport' => new SportResource($sport)
-                ], 201);
-            }
-        } catch (ValidationException $e) {
             return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al crear el deporte',
-                'error' => $e->getMessage()
-            ], 404);
+                'ok' => true,
+                'sport' => new SportResource($sport)
+            ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear el deporte debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear el deporte.'
             ], 500);
         }
     }
@@ -225,8 +207,7 @@ class SportController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener el deporte debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener el deporte.'
             ], 500);
         }
     }
@@ -291,19 +272,13 @@ class SportController extends Controller
     public function update(SportRequest $request, string $id)
     {
         try {
-            $request->validated();
             $sport = Sport::findOrFail($id);
-            $sport->update($request->all());
+            $sport->update($request->validated());
+            
             return response()->json([
                 'ok' => true,
                 'sport' => new SportResource($sport)
             ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
@@ -312,8 +287,7 @@ class SportController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar el deporte debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar el deporte.'
             ], 500);
         }
     }
@@ -372,8 +346,7 @@ class SportController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar el deporte debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar el deporte.'
             ], 500);
         }
     }
