@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use App\Models\Member;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\MemberResource;
 use Exception;
 
 /**
@@ -69,14 +67,16 @@ class AuthController extends Controller
             ], 401);
         
         } catch (Exception $e) {
-            $errorMsg = $e->getMessage();
-            if (strpos($errorMsg, "Personal access client not found") !== false) {
-                $errorMsg .= " Ejecuta: php artisan passport:client --personal";
+            if (strpos($e->getMessage(), "Personal access client not found") !== false) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Error de configuración del servidor. Contacte al administrador.',
+                ], 500);
             }
+            
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al iniciar sesión por error inesperado',
-                'error' => $errorMsg
+                'message' => 'Error interno del servidor durante el inicio de sesión.'
             ], 500);
         }
     }
@@ -116,8 +116,7 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al cerrar sesión por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor durante el cierre de sesión.'
             ], 500);
         }
     }
@@ -125,8 +124,8 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *  path="/auth/register",
-     *  summary="Registrar un nuevo usuario",
-     *  description="Registra un nuevo usuario en el sistema y crea automáticamente su perfil de miembro.",
+     *  summary="Registrar un nuevo usuario del sistema",
+     *  description="Registra un nuevo usuario del sistema (empleado/administrador) para acceso al CMS. Los socios se gestionan por separado.",
      *  tags={"Auth"},
      *  @OA\RequestBody(
      *   required=true,
@@ -139,7 +138,7 @@ class AuthController extends Controller
      *    type="object",
      *    @OA\Property(property="ok", type="boolean", example=true),
      *    @OA\Property(property="message", type="string", example="Usuario registrado correctamente"),
-     *    @OA\Property(property="court", ref="#/components/schemas/CourtResource")
+     *    @OA\Property(property="user", ref="#/components/schemas/UserResource")
      *   )
      *  ),
      *  @OA\Response(
@@ -149,7 +148,7 @@ class AuthController extends Controller
      *  ),
      *  @OA\Response(
      *   response=500,
-     *   description="Error al crear la pista",
+     *   description="Error al registrar usuario",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  )
      * )
@@ -158,7 +157,7 @@ class AuthController extends Controller
     try {
         $user_info = $request->validated();
         $user_info['password'] = bcrypt($user_info['password']);
-        $user_info['role'] = 'user';
+        $user_info['role'] = $user_info['role'] ?? 'user';
 
         if (User::where('email', $user_info['email'])->exists()) {
             return response()->json([
@@ -168,17 +167,12 @@ class AuthController extends Controller
         }
 
         $user = User::create($user_info);
-        $member = Member::create([
-            'user_id' => $user->id,
-            'membership_date' => now()->toDateString(),
-            'status' => 'active'
-        ]);
+        
         return response()->json([
-            'ok' =>true,
+            'ok' => true,
             'message' => 'Usuario registrado correctamente',
-            'user' => new UserResource($user),
-            'member' => new MemberResource($member)
-        ]);
+            'user' => new UserResource($user)
+        ], 201);
     } catch (ValidationException $e) {
         return response()->json([
             'ok' => false,
@@ -188,8 +182,7 @@ class AuthController extends Controller
     } catch (Exception $e) {
         return response()->json([
             'ok' => false,
-            'message' => 'Error al registrar usuario por error inesperado',
-            'error' => $e->getMessage()
+            'message' => 'Error interno del servidor durante el registro de usuario.'
         ], 500);
     }
 }

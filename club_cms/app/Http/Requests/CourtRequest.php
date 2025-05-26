@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CourtRequest extends FormRequest
 {
@@ -25,17 +23,27 @@ class CourtRequest extends FormRequest
     {
         return [
             'sport_id' => 'required|integer|exists:sports,id',
-            'name' => 'string|max:255',
-            'description' => 'string|max:255',
+            'name' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
     {
-        throw new HttpResponseException(response()->json([
-            'ok' => false,
-            'message' => 'Error de validación',
-            'errors' => $validator->errors()
-        ], 422));
+        return [
+            'sport_id.required' => 'El campo deporte es obligatorio.',
+            'sport_id.integer' => 'El deporte debe ser un número entero válido.',
+            'sport_id.exists' => 'El deporte seleccionado no existe.',
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.string' => 'El nombre debe ser una cadena de texto.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'location.string' => 'La ubicación debe ser una cadena de texto.',
+            'location.max' => 'La ubicación no puede tener más de 255 caracteres.',
+        ];
     }
 }

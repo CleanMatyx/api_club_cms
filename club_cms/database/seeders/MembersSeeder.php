@@ -13,6 +13,8 @@ class MembersSeeder extends Seeder
      */
     public function run(): void
     {
-        Member::factory(35)->create();
+        Member::factory(25)->active()->create();
+
+        Member::factory(5)->inactive()->create();
     }
 }

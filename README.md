@@ -123,7 +123,7 @@ cd club_cms</code></pre>
     </li>
     <li>
       <strong>Ingresar en la shell de PHP:</strong>
-      <pre><code>docker-compose exec club_cms_php sh</code></pre>
+      <pre><code>docker-compose exec -it club_cms_php sh</code></pre>
     </li>
     <li>
       <strong>Instalación de dependencias:</strong>
@@ -156,18 +156,18 @@ cd club_cms</code></pre>
   <h3>Shells de contenedores</h3>
   <ul>
     <li>PHP:
-      <pre><code>docker-compose exec club_cms_php sh</code></pre>
+      <pre><code>docker-compose exec -it club_cms_php sh</code></pre>
     </li>
     <li>MySQL:
-      <pre><code>docker-compose exec club_cms_database mysql -u root -p</code></pre>
+      <pre><code>docker-compose exec -it club_cms_database mysql -u root -p</code></pre>
     </li>
   </ul>
   <h3>Comandos útiles de Artisan</h3>
   <ul> 
-    <li><pre><code>docker-compose exec club_cms_php php artisan route:clear</code></pre></li>
-    <li><pre><code>docker-compose exec club_cms_php php artisan route:list</code></pre></li>
+    <li><pre><code>docker compose exec -it club_cms_php php artisan route:clear</code></pre></li>
+    <li><pre><code>docker compose exec -it club_cms_php php artisan route:list</code></pre></li>
     <li><p>Para detener y eliminar todo:</p>
-        <pre><code>docker-compose down -v</code></pre></li>
+        <pre><code>docker compose down -v</code></pre></li>
   </ul>
   <h2>Contacto</h2>
   <ul>

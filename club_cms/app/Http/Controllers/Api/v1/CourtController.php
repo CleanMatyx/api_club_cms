@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -83,8 +83,7 @@ class CourtController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener las pistas debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener las canchas.'
             ], 500);
         }
     }
@@ -143,32 +142,18 @@ class CourtController extends Controller
     public function store(CourtRequest $request)
     {
         try {
-            $request->validated();
-            $court = Court::create($request->all());
+            $validatedData = $request->validated();
+            $court = Court::create($validatedData);
 
-            if ($court) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Pista creada correctamente',
-                    'court' => new CourtResource($court)
-                ], 201);
-            }
-        } catch (ValidationException $e) {
             return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Recurso relacionado no encontrado'
-            ], 404);
+                'ok' => true,
+                'message' => 'Pista creada correctamente',
+                'court' => new CourtResource($court)
+            ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la pista por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear la pista.'
             ], 500);
         }
     }
@@ -230,8 +215,7 @@ class CourtController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener la pista por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener la cancha.'
             ], 500);
         }
     }
@@ -297,21 +281,15 @@ class CourtController extends Controller
     public function update(CourtRequest $request, string $id)
     {
         try {
-            $request->validated();
+            $validatedData = $request->validated();
             $court = Court::findOrFail($id);
-            $court->update($request->all());
+            $court->update($validatedData);
 
             return response()->json([
                 'ok' => true,
                 'message' => 'Pista actualizada correctamente',
                 'court' => new CourtResource($court)
             ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
@@ -320,8 +298,7 @@ class CourtController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar la pista por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar la pista.'
             ], 500);
         }
     }
@@ -380,8 +357,7 @@ class CourtController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar la pista por error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar la cancha.'
             ], 500);
         }
     }
@@ -500,7 +476,12 @@ class CourtController extends Controller
 
             $sport = Sport::where('name', $data['sport_name'])->first();
             if (!$sport) {
-                throw new ModelNotFoundException("El deporte consultado no está disponible.");
+                $availableSports = Sport::pluck('name')->toArray();
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'El deporte consultado no está disponible.',
+                    'available_sports' => $availableSports
+                ], 404);
             }
 
             $courts = Court::where('sport_id', $sport->id)->get();
@@ -540,14 +521,13 @@ class CourtController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => $e->getMessage(),
+                'message' => 'No hay horas disponibles para el deporte especificado.'
             ], 404);
 
         } catch (\Exception $e) {
             return response()->json([
                 'ok'=> false,
-                'message' => 'Ocurrió un error inesperado.',
-                'error' => $e->getMessage(),
+                'message' => 'Error interno del servidor al buscar horarios disponibles.'
             ], 500);
         }
     }

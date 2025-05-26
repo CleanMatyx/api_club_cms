@@ -1,44 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ReservationResource;
-use App\Models\Reservation;
-use App\Http\Requests\ReservationRequest;
+use App\Models\Sport;
+use App\Http\Resources\SportResource;
+use App\Http\Requests\SportRequest;
 use Exception;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * @OA\Tag(
- *   name="Reservations",
- *   description="Operaciones sobre reservas"
+ *   name="Sports",
+ *   description="Operaciones sobre deportes"
  * )
  */
-class ReservationController extends Controller
+class SportController extends Controller
 {
     /**
      * @OA\Get(
-     *   path="/reservations",
-     *   summary="Listar reservas",
-     *   description="Obtiene una lista paginada de todas las reservas. Accesible para usuarios y administradores autenticados.",
-     *   tags={"Reservations"},
+     *   path="/sports",
+     *   summary="Listar deportes",
+     *   description="Obtiene una lista paginada de todos los deportes. Accesible para usuarios y administradores autenticados.",
+     *   tags={"Sports"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Response(
      *     response=200,
-     *     description="Listado de reservas",
+     *     description="Listado de deportes",
      *     @OA\JsonContent(
      *       type="object",
      *       @OA\Property(property="ok", type="boolean", example=true),
      *       @OA\Property(
-     *         property="reservations",
+     *         property="sports",
      *         type="array",
-     *         @OA\Items(ref="#/components/schemas/ReservationResource")
+     *         @OA\Items(ref="#/components/schemas/SportResource")
      *       ),
      *       @OA\Property(property="page", type="integer", example=1),
      *       @OA\Property(property="total_pages", type="integer", example=5),
-     *       @OA\Property(property="total_reservations", type="integer", example=50)
+     *       @OA\Property(property="total_sports", type="integer", example=50)
      *     )
      *   ),
      *   @OA\Response(
@@ -48,12 +47,12 @@ class ReservationController extends Controller
      *   ),
      *   @OA\Response(
      *     response=404,
-     *     description="No hay reservas disponibles",
+     *     description="No hay deportes disponibles",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   ),
      *   @OA\Response(
      *     response=500,
-     *     description="Error al obtener las reservas",
+     *     description="Error al obtener los deportes",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   )
      * )
@@ -61,27 +60,25 @@ class ReservationController extends Controller
     public function index()
     {
         try {
-            $reservations = Reservation::paginate(15);
-
-            if(!$reservations->isEmpty()) {
+            $sports = Sport::paginate(15);
+            if(!$sports->isEmpty()) {
                 return response()->json([
                     'ok' => true,
-                    'reservations' => ReservationResource::collection($reservations),
-                    'page' => $reservations->currentPage(),
-                    'total_pages' => $reservations->lastPage(),
-                    'total_reservations' => $reservations->total()
+                    'sports' => SportResource::collection($sports),
+                    'page' => $sports->currentPage(),
+                    'total_pages' => $sports->lastPage(),
+                    'total_sports' => $sports->total()
                 ], 200);
             } else {
                 return response()->json([
                     'ok' => false,
-                    'message' => 'No hay reservas disponibles'
+                    'message' => 'No hay deportes disponibles'
                 ], 404);
             }
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener las reservas debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener los deportes.'
             ], 500);
         }
     }
@@ -96,22 +93,22 @@ class ReservationController extends Controller
 
     /**
      * @OA\Post(
-     *  path="/reservations",
-     *  summary="Crear una nueva reserva",
-     *  description="Crea una nueva reserva en el sistema. Accesible para usuarios y administradores autenticados.",
-     *  tags={"Reservations"},
+     *  path="/sports",
+     *  summary="Crear un nuevo deporte (Solo Admins)",
+     *  description="Crea un nuevo deporte en el sistema. Requiere rol de administrador.",
+     *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\RequestBody(
      *   required=true,
-     *   @OA\JsonContent(ref="#/components/schemas/ReservationRequest")
+     *   @OA\JsonContent(ref="#/components/schemas/SportRequest")
      *  ),
      *  @OA\Response(
      *   response=201,
-     *   description="Reserva creada correctamente",
+     *   description="Deporte creado correctamente",
      *   @OA\JsonContent(
      *    type="object",
      *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
+     *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
      *  ),
      *  @OA\Response(
@@ -121,7 +118,7 @@ class ReservationController extends Controller
      *  ),
      *  @OA\Response(
      *   response=404,
-     *   description="Reserva no encontrada",
+     *   description="Deporte no encontrado",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
@@ -131,66 +128,49 @@ class ReservationController extends Controller
      *  ),
      *  @OA\Response(
      *   response=500,
-     *   description="Error al crear la reserva",
+     *   description="Error al crear el deporte",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  )
      * )
      */
-    public function store(ReservationRequest $request)
+    public function store(SportRequest $request)
     {
         try {
-            $request->validated();
-            $reservation = Reservation::create($request->all());
+            $sport = Sport::create($request->validated());
 
-            if($reservation) {
-                return response()->json([
-                    'ok' => true,
-                    'message' => 'Reserva creada correctamente',
-                    'reservation' => new ReservationResource($reservation)
-                ], 201);
-            }
-        } catch (ValidationException $e) {
             return response()->json([
-                'ok' => false,
-                'message' => 'Error al crear la reserva',
-                'error' => $e->getMessage()
-            ], 422);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Recurso relacionado no encontrado',
-                'error' => $e->getMessage()
-            ], 404);
+                'ok' => true,
+                'sport' => new SportResource($sport)
+            ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear el deporte.'
             ], 500);
         }
     }
 
     /**
      * @OA\Get(
-     *  path="/reservations/{id}",
-     *  summary="Mostrar detalles de una reserva",
-     *  description="Obtiene los detalles de una reserva específica. Accesible para usuarios y administradores autenticados.",
-     *  tags={"Reservations"},
+     *  path="/sports/{id}",
+     *  summary="Mostrar detalles de un deporte",
+     *  description="Obtiene los detalles de un deporte específico. Accesible para usuarios y administradores autenticados.",
+     *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
      *   name="id",
      *   in="path",
-     *   description="ID de la reserva",
+     *   description="ID del deporte",
      *   required=true,
      *   @OA\Schema(type="integer", example=1)
      *  ),
      *  @OA\Response(
      *   response=200,
-     *   description="Detalle de la reserva",
+     *   description="Detalle del deporte",
      *   @OA\JsonContent(
      *    type="object",
      *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="reservation", ref="#/components/schemas/ReservationResource")
+     *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
      *  ),
      *  @OA\Response(
@@ -200,35 +180,34 @@ class ReservationController extends Controller
      *  ),
      *  @OA\Response(
      *   response=404,
-     *   description="Reserva no encontrada",
+     *   description="Deporte no encontrado",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
-     *    response=500,
-     *    description="Error al obtener la reserva",
-     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   response=500,
+     *   description="Error al obtener el deporte",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  )
      * )
      */
     public function show(string $id)
     {
         try {
-            $reservation = Reservation::findOrFail($id);
+            $sport = Sport::findOrFail($id);
 
             return response()->json([
                 'ok' => true,
-                'reservation' => new ReservationResource($reservation)
+                'sport' => new SportResource($sport)
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Reserva no encontrada'
+                'message' => 'Deporte no encontrado'
             ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener el deporte.'
             ], 500);
         }
     }
@@ -243,29 +222,29 @@ class ReservationController extends Controller
 
     /**
      * @OA\Put(
-     *  path="/reservations/{id}",
-     *  summary="Actualizar una reserva existente",
-     *  description="Actualiza los datos de una reserva existente. Accesible para usuarios y administradores autenticados.",
-     *  tags={"Reservations"},
+     *  path="/sports/{id}",
+     *  summary="Actualizar un deporte existente (Solo Admins)",
+     *  description="Actualiza los datos de un deporte existente. Requiere rol de administrador.",
+     *  tags={"Sports"},
      *  security={{"bearerAuth":{}}},
      *  @OA\Parameter(
      *   name="id",
      *   in="path",
-     *   description="ID de la reserva a actualizar",
+     *   description="ID del deporte a actualizar",
      *   required=true,
      *   @OA\Schema(type="integer", example=1)
      *  ),
      *  @OA\RequestBody(
      *   required=true,
-     *   @OA\JsonContent(ref="#/components/schemas/ReservationRequest")
+     *   @OA\JsonContent(ref="#/components/schemas/SportRequest")
      *  ),
      *  @OA\Response(
      *   response=200,
-     *   description="Reserva actualizada correctamente",
+     *   description="Deporte actualizado correctamente",
      *   @OA\JsonContent(
      *    type="object",
      *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="reservation",ref="#/components/schemas/ReservationResource")
+     *    @OA\Property(property="sport", ref="#/components/schemas/SportResource")
      *   )
      *  ),
      *  @OA\Response(
@@ -274,75 +253,66 @@ class ReservationController extends Controller
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
-     *    response=404,
-     *    description="Reserva no encontrada",
-     *    @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *   response=404,
+     *   description="Deporte no encontrado",
+     *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  ),
      *  @OA\Response(
      *    response=422,
      *    description="Error de validación",
      *    @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
-     *   ),
+     *  ),
      *  @OA\Response(
      *   response=500,
-     *   description="Error al actualizar la reserva",
+     *   description="Error al actualizar el deporte",
      *   @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *  )
      * )
      */
-    public function update(ReservationRequest $request, string $id)
+    public function update(SportRequest $request, string $id)
     {
         try {
-            $request->validated();
-            $reservation = Reservation::findOrFail($id);
-            $reservation->update($request->all());
-
+            $sport = Sport::findOrFail($id);
+            $sport->update($request->validated());
+            
             return response()->json([
                 'ok' => true,
-                'message' => 'Reserva actualizada correctamente',
-                'reservation' => new ReservationResource($reservation)
+                'sport' => new SportResource($sport)
             ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al actualizar la reserva',
-                'error' => $e->getMessage()
-            ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Reserva no encontrada'
+                'message' => 'Deporte no encontrado'
             ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar el deporte.'
             ], 500);
         }
     }
 
     /**
      * @OA\Delete(
-     *   path="/reservations/{id}",
-     *   summary="Eliminar una reserva",
-     *   description="Elimina una reserva del sistema. Accesible para usuarios y administradores autenticados.",
-     *   tags={"Reservations"},
+     *   path="/sports/{id}",
+     *   summary="Eliminar un deporte (Solo Admins)",
+     *   description="Elimina un deporte del sistema. Requiere rol de administrador.",
+     *   tags={"Sports"},
      *   security={{"bearerAuth":{}}},
      *   @OA\Parameter(
      *     name="id",
      *     in="path",
-     *     description="ID de la reserva a eliminar",
+     *     description="ID del deporte a eliminar",
      *     required=true,
      *     @OA\Schema(type="integer", example=1)
      *   ),
      *   @OA\Response(
      *     response=200,
-     *     description="Reserva eliminada correctamente",
+     *     description="Deporte eliminado correctamente",
      *     @OA\JsonContent(
      *       type="object",
      *       @OA\Property(property="ok", type="boolean", example=true),
-     *       @OA\Property(property="message", type="string",  example="Reserva eliminada correctamente")
+     *       @OA\Property(property="message", type="string", example="Deporte eliminado correctamente")
      *     )
      *   ),
      *   @OA\Response(
@@ -352,7 +322,7 @@ class ReservationController extends Controller
      *   ),
      *   @OA\Response(
      *     response=500,
-     *     description="Error al eliminar la reserva",
+     *     description="Error al eliminar el deporte",
      *     @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *   )
      * )
@@ -360,24 +330,23 @@ class ReservationController extends Controller
     public function destroy(string $id)
     {
         try {
-            $reservation = Reservation::findOrFail($id);
-            $reservation->delete();
-            if($reservation) {
+            $sport = Sport::findOrFail($id);
+            $sport->delete();
+            if($sport) {
                 return response()->json([
                     'ok' => true,
-                    'message' => 'Reserva eliminada correctamente'
+                    'message' => 'Deporte eliminado correctamente'
                 ], 200);
             } else {
                 return response()->json([
                     'ok' => false,
-                    'message' => 'Error al eliminar la reserva'
+                    'message' => 'Error al eliminar el deporte'
                 ], 500);
             }
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar la reserva debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar el deporte.'
             ], 500);
         }
     }

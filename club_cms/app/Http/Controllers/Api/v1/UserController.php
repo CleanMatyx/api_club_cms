@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @OA\Tag(
@@ -81,8 +79,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener los usuarios debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener los usuarios.'
             ], 500);
         }
     }
@@ -141,8 +138,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try {
-            $request->validated();
-            $data = $request->all();
+            $data = $request->validated();
             $data['password'] = Hash::make($data['password']);
             $user = User::create($data);
 
@@ -151,23 +147,10 @@ class UserController extends Controller
                 'message' => 'Usuario creado correctamente',
                 'user' => new UserResource($user)
             ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al crear el usuario',
-                'error' => $e->getMessage()
-            ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear el usuario debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear el usuario.'
             ], 500);
         }
     }
@@ -229,8 +212,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener el usuario debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener el usuario.'
             ], 500);
         }
     }
@@ -296,9 +278,8 @@ class UserController extends Controller
     public function update(UserRequest $request, string $id)
     {
         try {
-            $request->validated();
             $user = User::findOrFail($id);
-            $data = $request->all();
+            $data = $request->validated();
 
             if (isset($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
@@ -312,12 +293,6 @@ class UserController extends Controller
                 'message' => 'Usuario actualizado correctamente',
                 'user' => new UserResource($user)
             ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'ok' => false,
@@ -326,8 +301,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar el usuario debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar el usuario.'
             ], 500);
         }
     }
@@ -391,8 +365,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar el usuario debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar el usuario.'
             ], 500);
         }
     }

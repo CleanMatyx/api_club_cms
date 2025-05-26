@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
@@ -79,8 +79,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener los miembros debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener los miembros.'
             ], 500);
         }
     }
@@ -107,12 +106,7 @@ class MemberController extends Controller
      *  @OA\Response(
      *   response=201,
      *   description="Miembro creado correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="message", type="string", example="Miembro creado correctamente"),
-     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/MemberCreateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,
@@ -160,8 +154,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al crear el miembro.'
             ], 500);
         }
     }
@@ -222,8 +215,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al obtener el miembro.'
             ], 500);
         }
     }
@@ -257,12 +249,7 @@ class MemberController extends Controller
      *  @OA\Response(
      *   response=200,
      *   description="Miembro actualizado correctamente",
-     *   @OA\JsonContent(
-     *    type="object",
-     *    @OA\Property(property="ok", type="boolean", example=true),
-     *    @OA\Property(property="message", type="string", example="Miembro actualizado correctamente"),
-     *    @OA\Property(property="member", ref="#/components/schemas/MemberResource")
-     *   )
+     *   @OA\JsonContent(ref="#/components/schemas/MemberUpdateResponse")
      *  ),
      *  @OA\Response(
      *   response=401,
@@ -311,8 +298,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al actualizar el miembro.'
             ], 500);
         }
     }
@@ -374,8 +360,7 @@ class MemberController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar el miembro debido a un error inesperado',
-                'error' => $e->getMessage()
+                'message' => 'Error interno del servidor al eliminar el miembro.'
             ], 500);
         }
     }

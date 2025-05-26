@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Member extends Model
 {
@@ -21,6 +22,9 @@ class Member extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'name',
+        'email',
+        'phone',
         'user_id',
         'membership_date',
         'status',
@@ -32,7 +36,7 @@ class Member extends Model
      */
     public function reservations() {
         return $this->hasMany(Reservation::class);
-    }
+    }      
 
     /**
      * Get the user associated with the member.
