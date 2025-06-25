@@ -403,6 +403,3 @@ El sistema incluye seeders con datos de ejemplo:
 - **GitHub:** [CleanMatyx](https://github.com/CleanMatyx)
 - **Email:** [mtsbrr07@gmail.com](mailto:mtsbrr07@gmail.com)
 
----
-
-¡Gracias por usar **Club CMS**! 🎾⚽🏀
